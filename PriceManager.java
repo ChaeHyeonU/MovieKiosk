@@ -106,7 +106,7 @@ public class PriceManager {
 		//여기에 7.2로 넘어가는 함수 입력
 	}
 	
-	public void ReserveSave() { //예매 내역 저장 
+	public void ReserveSave() {  //예매 내역 저장 
 		//아직 구현이 안됨
 	}
 	
