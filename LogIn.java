@@ -13,7 +13,7 @@ public class LogIn {
 //        1. Log in 2. Sign up 3. Exit
 //        입력:
         System.out.println("1. Log in 2. Sign up 3. Exit");
-        System.out.print("입력: ");
+        System.out.print(">> ");
         String order = scan.nextLine();
         switch (order){
             case "1":
@@ -23,7 +23,6 @@ public class LogIn {
                 signUp();
                 break;
             case "3":
-                System.out.println("3. Exit"); // 지울 것
                 System.exit(0);
                 break;
             default:
@@ -35,10 +34,8 @@ public class LogIn {
 
     private static void signUp() {
 //        ID, PW 둘 다 문법규칙 세부적 조정할 것
-        System.out.println("2. Sign up"); // 지울 것
         String ID = signUpID(0);
         String PW = signUpPW(0);
-        System.out.println("ID : " + ID + ", PW : " + PW); // 지울 것
         // 데이터 파일에 회원정보 등록
         register(ID, PW);
 
@@ -52,16 +49,22 @@ public class LogIn {
     }
 
     private static void register(String ID, String PW) {
-        // 아직 파일이 존재하지 않을 시 오류
-        // 아직 파일에 데이터가 존재하지 않을 시 오류
+        String str = new String();
         try {
-            String str;
             // 기존 회원정보 str에 불러오기
             BufferedInputStream bis = new BufferedInputStream(new FileInputStream("./memberInfo.txt"));
             byte [] buffer = new byte [bis.available()];
-            while( bis.read(buffer) != -1) {}
+            int buff;
+            while((buff = bis.read(buffer)) != -1) {
+                if (buff == 0) // 데이터 없을 시
+                    break;
+            }
             str = new String(buffer);
             bis.close();
+        } catch (IOException e) {
+//            System.out.println("register : 파일 없는데 뭐 어쩌라고");
+        }
+        try {
             // 새로운 회원정보 str에 추가 후 파일에 입력하기
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("./memberInfo.txt"));
             str +="{\n";
@@ -71,7 +74,6 @@ public class LogIn {
             bos.write(str.getBytes());
             bos.close();
         } catch (IOException e) {
-            e.getStackTrace();
         }
     }
 
@@ -79,9 +81,9 @@ public class LogIn {
 //        Enter 5~20 letters and numbers
 //        ID:
         if (errCode == 0)
-            System.out.println("Enter 5~20 letters and numbers");
+            System.out.println("Enter 5~20 characters, including at least 1 english lowercase letter and 1 number.");
         else if (errCode == 1)
-            System.out.println("Enter only 5~20 letters and numbers");
+            System.out.println("\"MUST\" 5~20 characters, including at least 1 english lowercase letter and 1 number.");
         else if (errCode == 2)
             System.out.println("Already exists ID");
 
@@ -94,7 +96,7 @@ public class LogIn {
     private static String checkID(String ID) {
 //        길이가 5이상 20이하
 //        공백 포함하지 않음
-//        영문 소문자와 숫자로 이루어진 문자열
+//        하나 이상의 영문 소문자와 하나 이상의 숫자로 이루어진 문자열
         if (ID.length() < 5 || ID.length() > 20) // 문법규칙 아직 길이제한만
             ID = signUpID(1);
         else if (existID(ID)) // 의미규칙
@@ -104,7 +106,6 @@ public class LogIn {
     }
 
     private static boolean existID(String ID) {
-        // 아직 파일이 존재하지 않을 시 오류
         try {
             // bis 방식
 //            BufferedInputStream bis = new BufferedInputStream(new FileInputStream("./memberInfo.txt"));
@@ -121,25 +122,24 @@ public class LogIn {
                 if (str.equals("{")){
                     String compID = br.readLine();
                     if (compID.equals(ID)){
-                        System.out.println("existID : " + compID); // 지울 것
                         return true;
                     }
                 }
             }
             br.close();
         } catch (IOException e) {
-            e.printStackTrace();
+//            System.out.println("existID : 파일 없는데 뭐 어쩌라고");
         }
         return false;
     }
 
     private static String signUpPW(int errCode) {
-//        Enter 8~16 letters, uppercase and lowercase letters, numbers and special characters.
+//        Enter 8~16 characters, including at least 1 alphabet, 1 number and 1 special character.
 //        PW:
         if (errCode == 0)
-            System.out.println("Enter 8~16 letters, uppercase and lowercase letters, numbers and special characters.");
+            System.out.println("Enter 8~16 characters, including at least 1 alphabet, 1 number and 1 special character.");
         else if (errCode == 1)
-            System.out.println("Enter only 8~16 letters, uppercase and lowercase letters, numbers and special characters.");
+            System.out.println("\"MUST\" 8~16 characters, including at least 1 alphabet, 1 number and 1 special character.");
 
         System.out.print("PW: ");
         String PW = scan.nextLine();
@@ -151,7 +151,7 @@ public class LogIn {
 //        길이가 8이상 16이하
 //        공백 포함하지 않음
 //        로마자 영문 대/소문자를 구분
-//        특수문자 포함
+//        하나이상의 영문자와 하나이상의 숫자와 하나 이상의 특수문자로 이루어진 문자열
         if (PW.length() < 8 || PW.length() > 16) // 문법규칙 아직 길이제한만
             PW = signUpPW(1);
 
