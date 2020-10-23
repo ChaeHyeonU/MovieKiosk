@@ -116,23 +116,7 @@ public class PriceManager {
 	}
 	
 	private void ReserveSave() {   // 예매 내역을 유저 정보에 저장 
-		try {
-//			String str;
-//            BufferedInputStream bis = new BufferedInputStream(new FileInputStream("./memberInfo.txt"));
-//            byte [] buffer = new byte [bis.available()];
-//            while( bis.read(buffer) != -1) {}
-//            str = new String(buffer);
-//            bis.close();
-//            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("./memberInfo.txt"));
-//            str +="{\n";
-//            str += ID + "\n";
-//            str += PW + "\n";
-//            str += "}\n";
-//            bos.write(str.getBytes());
-//            bos.close();
-		} catch(IOException e) {
-			e.getStackTrace();
-		}
+                
 		Reserveupdate();
 	}
 	
