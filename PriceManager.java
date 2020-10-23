@@ -6,20 +6,20 @@ import java.util.Scanner;
 
 public class PriceManager {
 	private String UserName;
-	private int price;
-	private double[] time = new double[3];
-	private double[] D = new double[3];
-	private double[] age = new double[2];
-	private double[] sit = new double[3];
-	private char[] priceArray = new char[45]; //price array
+	private int price;                        //기본 가격
+	private double[] time = new double[3];    // 시간 할인율 배열
+	private double[] D = new double[3];       //  2D,3D등의 할인율 배열
+	private double[] age = new double[2];     // 나이별 할인율 배열
+	private double[] sit = new double[3];     // 좌석별 할인율 저장 
+	private char[] priceArray = new char[45]; //가격 파일을 저장
 	
-	private String movieInform;
-	private double totalPrice=0;
-	private int timeI; // only 0,1,2
-	private int DI;    // only 0,1,2
-	private int[][] sitInform; //int [sit][age]
+	private String movieInform;       //영화 정보
+	private double totalPrice=0;      //최종 가격
+	private int timeI; // only 0,1,2  //선택한 시간대(조조,일반,심야)
+	private int DI;    // only 0,1,2  //선택한 2D,3D,4D
+	private int[][] sitInform; //int [선택한 좌석][앉는 사람의 나이]  
 	
-	public PriceManager(String UserName, String movieInform,int timeI, int DI,int[][] sitInform) {
+	public PriceManager(String UserName, String movieInform,int timeI, int DI,int[][] sitInform) {  //생성자
 		this.UserName = UserName;
 		this.movieInform = movieInform;
 		this.timeI = timeI;
@@ -27,7 +27,7 @@ public class PriceManager {
 		this.sitInform = sitInform;
 	}
 	
-	private void FileRead() { // price file read and save in array
+	private void FileRead() { // 가격 정보를 파일에서 불러와서 priceArray에 저장
 		File price_file = new File("price.txt");
 		try {
 			FileReader fileR = new FileReader(price_file);
