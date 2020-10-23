@@ -5,21 +5,21 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class PriceManager {
-	private String UserName;
-	private int price;                        //기본 가격
+	private String UserName;                  // 위에서부터 넘어 올 유저 이름
+	private int price;                        // 기본 가격
 	private double[] time = new double[3];    // 시간 할인율 배열
 	private double[] D = new double[3];       //  2D,3D등의 할인율 배열
 	private double[] age = new double[2];     // 나이별 할인율 배열
 	private double[] sit = new double[3];     // 좌석별 할인율 저장 
-	private char[] priceArray = new char[45]; //가격 파일을 저장
+	private char[] priceArray = new char[45]; // 가격 파일을 저장
 	
-	private String movieInform;       //영화 정보
-	private double totalPrice=0;      //최종 가격
-	private int timeI; // only 0,1,2  //선택한 시간대(조조,일반,심야)
-	private int DI;    // only 0,1,2  //선택한 2D,3D,4D
-	private int[][] sitInform; //int [선택한 좌석][앉는 사람의 나이]  
+	private String movieInform;               // 영화 정보
+	private double totalPrice=0;              // 최종 가격
+	private int timeI; // only 0,1,2          // 선택한 시간대(조조,일반,심야)
+	private int DI;    // only 0,1,2          // 선택한 2D,3D,4D
+	private int[][] sitInform;                // int [선택한 좌석][앉는 사람의 나이]  
 	
-	public PriceManager(String UserName, String movieInform,int timeI, int DI,int[][] sitInform) {  //생성자
+	public PriceManager(String UserName, String movieInform,int timeI, int DI,int[][] sitInform) {  // 생성자
 		this.UserName = UserName;
 		this.movieInform = movieInform;
 		this.timeI = timeI;
@@ -41,7 +41,7 @@ public class PriceManager {
 		}
 	}
 	
-	private void priceSort() { //save price inform
+	private void priceSort() { // save price inform
 		FileRead();
 		String data = String.valueOf(priceArray);
 		String[] array = data.split(",");
@@ -57,7 +57,7 @@ public class PriceManager {
 		}
 	}
 	
-	public void priceCalculator() {
+	public void priceCalculator() { // 가격 정보 출력 및 저장
 		Scanner sc = new Scanner(System.in);
 		int adult=0;
 		int child=0;
@@ -106,11 +106,11 @@ public class PriceManager {
 		//여기에 7.2로 넘어가는 함수 입력
 	}
 	
-	public void ReserveSave() {  //예매 내역 저장 
-		//아직 구현이 안됨
+	public void ReserveSave() {  // 예매 내역 저장 
+		// 아직 구현이 안됨
 	}
 	
-	public void pricePrint() {
+	public void pricePrint() { // 결제 화면 출력
 		String [] temp = this.movieInform.split(" ");
 		for(int i=0;i<temp.length;i++) System.out.println(temp[i]);
 	}
