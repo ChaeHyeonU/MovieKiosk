@@ -106,11 +106,11 @@ public class PriceManager {
 		//여기에 7.2로 넘어가는 함수 입력
 	}
 	
-	public void ReserveSave() {  // 예매 내역 저장 
+	private void ReserveSave() {  // 예매 내역 저장 
 		// 아직 구현이 안됨
 	}
 	
-	public void pricePrint() { // 결제 화면 출력
+	private void pricePrint() { // 결제 화면 출력
 		String [] temp = this.movieInform.split(" ");
 		for(int i=0;i<temp.length;i++) System.out.println(temp[i]);
 	}
