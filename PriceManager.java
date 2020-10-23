@@ -5,19 +5,19 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class PriceManager {
-	String UserName;
-	int price;
-	double[] time = new double[3];
-	double[] D = new double[3];
-	double[] age = new double[2];
-	double[] sit = new double[3];
-	char[] priceArray = new char[45]; //price array
+	private String UserName;
+	private int price;
+	private double[] time = new double[3];
+	private double[] D = new double[3];
+	private double[] age = new double[2];
+	private double[] sit = new double[3];
+	private char[] priceArray = new char[45]; //price array
 	
-	String movieInform;
-	double totalPrice=0;
-	int timeI; // only 0,1,2
-	int DI;    // only 0,1,2
-	int[][] sitInform; //int [sit][age]
+	private String movieInform;
+	private double totalPrice=0;
+	private int timeI; // only 0,1,2
+	private int DI;    // only 0,1,2
+	private int[][] sitInform; //int [sit][age]
 	
 	public PriceManager(String UserName, String movieInform,int timeI, int DI,int[][] sitInform) {
 		this.UserName = UserName;
