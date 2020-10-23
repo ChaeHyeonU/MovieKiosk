@@ -1,5 +1,9 @@
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
@@ -14,17 +18,19 @@ public class PriceManager {
 	private char[] priceArray = new char[45]; // 가격 파일을 저장
 	
 	private String movieInform;               // 영화 정보
-	private double totalPrice=0;              // 최종 가격
+	private double totalPrice = 0;            // 최종 가격
+	private String timeinform = null;         // 영화 시작 시간
 	private int timeI; // only 0,1,2          // 선택한 시간대(조조,일반,심야)
 	private int DI;    // only 0,1,2          // 선택한 2D,3D,4D
 	private int[][] sitInform;                // int [선택한 좌석][앉는 사람의 나이]  
+	private String[][] sitInformStr;          // int [선택한 좌석][앉는 사람의 나이]        
 	
-	public PriceManager(String UserName, String movieInform,int timeI, int DI,int[][] sitInform) {  // 생성자
+	public PriceManager(String UserName, String movieInform,int timeI, int DI,String[][] sitInformstr) {  // 생성자
 		this.UserName = UserName;
 		this.movieInform = movieInform;
 		this.timeI = timeI;
 		this.DI = DI;
-		this.sitInform = sitInform;
+		this.sitInformStr = sitInformstr;
 	}
 	
 	private void FileRead() { // 가격 정보를 파일에서 불러와서 priceArray에 저장
@@ -41,7 +47,7 @@ public class PriceManager {
 		}
 	}
 	
-	private void priceSort() { // save price inform
+	private void priceSort() {    // 각 할인율 및 가격을  알맞는 배열에 저장
 		FileRead();
 		String data = String.valueOf(priceArray);
 		String[] array = data.split(",");
@@ -55,6 +61,9 @@ public class PriceManager {
 				else if(i==4) for(int a=0;a<sit.length;a++) sit[a] = Double.parseDouble(temp[a]);
 			}
 		}
+	}
+	private void sitinformChange() { //좌석 정보를  priceCalculator 편하게 만들어주는 메소드
+		
 	}
 	
 	public void priceCalculator() { // 가격 정보 출력 및 저장
@@ -106,8 +115,29 @@ public class PriceManager {
 		//여기에 7.2로 넘어가는 함수 입력
 	}
 	
-	private void ReserveSave() {  // 예매 내역 저장 
-		// 아직 구현이 안됨
+	private void ReserveSave() {   // 예매 내역을 유저 정보에 저장 
+		try {
+//			String str;
+//            BufferedInputStream bis = new BufferedInputStream(new FileInputStream("./memberInfo.txt"));
+//            byte [] buffer = new byte [bis.available()];
+//            while( bis.read(buffer) != -1) {}
+//            str = new String(buffer);
+//            bis.close();
+//            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("./memberInfo.txt"));
+//            str +="{\n";
+//            str += ID + "\n";
+//            str += PW + "\n";
+//            str += "}\n";
+//            bos.write(str.getBytes());
+//            bos.close();
+		} catch(IOException e) {
+			e.getStackTrace();
+		}
+		Reserveupdate();
+	}
+	
+	private void Reserveupdate() { // 예매내역을 통해 좌석 예약을 업데이트
+		
 	}
 	
 	private void pricePrint() { // 결제 화면 출력
