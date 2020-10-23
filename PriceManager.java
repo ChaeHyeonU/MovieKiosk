@@ -110,6 +110,7 @@ public class PriceManager {
 		int standard=0;
 		int prime=0;
 		timeChange();
+		DChange();
 		sitInformChange();
 		priceSort();
 		pricePrint();
