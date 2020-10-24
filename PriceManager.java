@@ -85,11 +85,8 @@ public class PriceManager {
 		else if(this.movieInf[2].equals("3D")) this.DI = 1;
 		else this.DI = 2;
 	}
-
-	public void sitInformChange() {    // 좌석 정보를  priceCalculator에게 편하게 만들어주는 메소드
-		this.seatInform = new int[this.seatInformStr.length][this.seatInformStr[0].length];
-		for(int i=0;i<this.seatInform.length;i++) this.seatInform[i][1] = Integer.parseInt(this.seatInformStr[i][1]);
-		
+	
+	public String[][] seatMoiveInf(){  //영화정보를 찾고 
 		List<String> seat_list = new ArrayList<String>();
 		try {
 			File seatInf = new File("SeatInf.txt");
@@ -117,6 +114,12 @@ public class PriceManager {
 				y++;
 			}
 		}
+		
+		return seat_list_detail;
+	}
+	
+	public int findSeat() {
+		String[][] seat_list_detail = this.seatMoiveInf();
 		int find=0;
 		for(int i =0;i<seat_list_detail.length;i++) {
 			for(int q=0;q<this.movieInf.length;q++) {
@@ -126,6 +129,15 @@ public class PriceManager {
 				else break;
 			}
 		}
+		return find;
+	}
+
+	public void seatInformChange() {    // 좌석 정보를  priceCalculator에게 편하게 만들어주는 메소드
+		this.seatInform = new int[this.seatInformStr.length][this.seatInformStr[0].length];
+		for(int i=0;i<this.seatInform.length;i++) this.seatInform[i][1] = Integer.parseInt(this.seatInformStr[i][1]);
+		
+		String[][] seat_list_detail = this.seatMoiveInf();
+		int find = this.findSeat();
 		
 		//등급 나누기
 		String[] seatline = seat_list_detail[find][5].split("\t");
@@ -153,7 +165,7 @@ public class PriceManager {
 		moiveChange();
 		timeChange();
 		DChange();
-		sitInformChange();
+		seatInformChange();
 		priceSort();
 		pricePrint();
 		
@@ -199,8 +211,9 @@ public class PriceManager {
 	
 	private void ReserveSave() {   // 예매 내역을 유저 정보에 저장 
 		String str = this.movieSort();
-		String name = this.UserName;
+		String user = this.UserName;
 		//유저 찾는 함수 필요
+		
 		Reserveupdate();
 	}
 	
