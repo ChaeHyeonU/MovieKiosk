@@ -307,12 +307,4 @@ public class Movie {
 			System.out.println();
 	}  
 	
-	
-	public static void main(String[] args){	
-		Movie movie = new Movie();
-		movie.initmovielist();
-		movie.searchselect();
-		System.out.println(movie.inform);
-	}
-	
 }
