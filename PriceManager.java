@@ -69,7 +69,7 @@ public class PriceManager {
 		}
 	}
 	
-	private void moiveChange() {
+	private void moiveChange() {   // 각 영화 정보 배열에 저장
 		this.movieInf = this.movieInform.split("\r\n");
 		//this.movieInf = this.movieInform.split(" ");
 	}
@@ -88,13 +88,12 @@ public class PriceManager {
 		else this.DI = 2;
 	}
 	
-	private String[][] seatMoiveInf(){  //영화정보를 찾고 
+	private String[][] seatMoiveInf(){  // 영화 정보를 찾고 영화 정보 배열에 저장
 		List<String> seat_list = new ArrayList<String>();
 		try {
 			File seatInf = new File("SeatInf.txt");
 			BufferedReader br = new BufferedReader(new FileReader(seatInf));
 			String temp;
-			String str;
 			while((temp = br.readLine())!=null) seat_list.add(temp);
 			br.close();
 		}catch (FileNotFoundException e) {
@@ -120,7 +119,7 @@ public class PriceManager {
 		return seat_list_detail;
 	}
 	
-	private int findSeat() {
+	private int findSeat() {  // 사용자가 선택한 영화를 찾는 메소드
 		String[][] seat_list_detail = this.seatMoiveInf();
 		int find=0;
 		for(int i =0;i<seat_list_detail.length;i++) {
@@ -195,7 +194,8 @@ public class PriceManager {
 			String str = sc.next();
 			if(str.equals("o")) {
 				System.out.println("You have chosen to pay");
-				ReserveSave();
+				ReserveUserSave();
+				ReserveSeatupdate();
 				break;
 			}
 			else if(str.equals("x")) {
@@ -207,15 +207,62 @@ public class PriceManager {
 		//여기에 7.2로 넘어가는 함수 입력
 	}
 	
-	private void ReserveSave() {   // 예매 내역을 유저 정보에 저장 
-		String str = this.movieSort();
-		Reserveupdate();
-		String user = this.UserName;
-		//유저 찾는 함수 필요
+	private int userFind(){  // user 정보를 찾는 메소드
+		int find=0;
+		List<String> user_list = new ArrayList<String>();
+		try {
+			File userInf = new File("memberInfo.txt");
+			BufferedReader br = new BufferedReader(new FileReader(userInf));
+			String temp;
+			while((temp = br.readLine())!=null) user_list.add(temp);
+			br.close();
+		}catch (FileNotFoundException e) {
+			System.out.println("file does not exist");
+			e.printStackTrace();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+		for(int i=1;i<user_list.size();i++) {
+			if(user_list.get(i-1).equals("{")) {
+				if(user_list.get(i).equals(this.UserName)) {
+					find = i+2;
+					break;
+				}
+			}
+		}
+		return find;
+	}
+	
+	private void ReserveUserSave() {   // 예매 내역을 유저 정보에 저장 
+		String movieInf = this.movieSort();
+		
+		File file = new File("memberInfo.txt");
+		String temp = "";
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+			String line;
+			for(int i=0;i<this.userFind();i++) {
+				line = br.readLine();
+				temp += (line+ "\n");
+			}
+			temp += (movieInf + "\n");
+			String str = br.readLine();
+			temp += (str+"\n");
+			
+			while((line = br.readLine())!= null) temp += (line + "\n");
+			FileWriter fw =new FileWriter("memberInfo.txt");
+			fw.write(temp);
+			fw.close();
+			br.close();
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 	
-	private void Reserveupdate() { // 예매내역을 통해 좌석 예약을 업데이트
+	private void ReserveSeatupdate() {                  // 예매내역을 통해 좌석 예약을 user 정보에 저장
 		String[][] seat_list_detail = this.seatMoiveInf();
 		String[] seatline = seat_list_detail[this.findSeat()][5].split("\t");
 		char[][] seat_detail = new char[seatline.length][seatline[0].toCharArray().length];
@@ -237,7 +284,6 @@ public class PriceManager {
 			str = "";
 		}
 		for(int i=0;i<seatline.length;i++) str = str + seatline[i] + "\t";
-		//seat_list_detail[this.findSeat()][5] = str;
 		
 		File file = new File("SeatInf.txt");
 		String temp = "";
@@ -261,15 +307,14 @@ public class PriceManager {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
-		
 	}
-	private String movieSort() {      //출력하기 위해 영화정보 정렬
-		String str = this.movieInf[4]+",";
-		str = str+ this.movieInf[3]+",";
-		str = str+ this.movieInf[2].charAt(0)+"D,";
-		str = str+ this.movieInf[1]+",";
-		str = str+ "Screen "+this.movieInf[0]+",";
+	
+	private String movieSort() {                      //출력하기 위해 영화정보 정렬
+		String str = this.movieInf[4]+",";            // 날짜 
+		str = str+ this.movieInf[3]+",";              // 시간
+		str = str+ this.movieInf[2].charAt(0)+"D,";   // D
+		str = str+ this.movieInf[1]+",";              // 영화 이름
+		str = str+ "Screen "+this.movieInf[0];        // 상영관
 		return str;
 	}
 	
