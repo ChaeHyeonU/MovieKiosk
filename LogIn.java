@@ -3,11 +3,12 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class LogIn {
+    static String nowID;
     static Scanner scan = new Scanner(System.in);
     public static void main(String[] args) {
         inputOrder();
     }
-    private static void inputOrder(){
+    protected static void inputOrder(){
 //        1. Log in 2. Sign up 3. Exit
 //        입력:
         System.out.println("1. Log in 2. Sign up 3. Exit");
@@ -144,6 +145,7 @@ public class LogIn {
                 if (str.equals("{")){
                     String compID = br.readLine();
                     if (compID.equals(ID)){
+                        br.close();
                         return true;
                     }
                 }
@@ -228,9 +230,10 @@ public class LogIn {
     }
 
     private static void logIn() {
-        String ID = logInID();
-        logInPW(ID);
-        // 7.2 실행 및 ID 전달
+        nowID = logInID();
+        logInPW(nowID);
+        // 7.2 실행 및 nowID 전달
+        Select.selectOrder();
     }
 
     private static String logInID() {
@@ -238,7 +241,7 @@ public class LogIn {
         String ID = scan.nextLine();
         if (ID.length() == 0 || includeBlank(ID) || !existID(ID)) {
             System.out.println("This ID is not registered");
-            logInID();
+            ID = logInID();
         }
 
         return ID;
@@ -260,9 +263,12 @@ public class LogIn {
             while ((str = br.readLine()) != null){
                 // str에 개행 전까지 받아옴
 //                System.out.println(str);
-                if (str.equals(ID)){
-                    String compPW = br.readLine();
-                    return compPW.equals(PW);
+                if (str.equals("{")){
+                    if (br.readLine().equals(ID)) {
+                        String compPW = br.readLine();
+                        br.close();
+                        return compPW.equals(PW);
+                    }
                 }
             }
             br.close();
