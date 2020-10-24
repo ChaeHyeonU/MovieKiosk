@@ -262,7 +262,7 @@ public class PriceManager {
 		
 	}
 	
-	private void ReserveSeatupdate() {                  // 예매내역을 통해 좌석 예약을 user 정보에 저장
+	private void ReserveSeatupdate() {                  // 예매내역을 통해 좌석 예약을 영화정보에 저장
 		String[][] seat_list_detail = this.seatMoiveInf();
 		String[] seatline = seat_list_detail[this.findSeat()][5].split("\t");
 		char[][] seat_detail = new char[seatline.length][seatline[0].toCharArray().length];
