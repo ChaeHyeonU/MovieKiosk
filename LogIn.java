@@ -196,14 +196,6 @@ public class LogIn {
         return PW;
     }
 
-    private static boolean includeBlank(String str) {
-        for (int i = 0; i < str.length(); i++) {
-            if (Character.isWhitespace(str.charAt(i)))
-                return true;
-        }
-        return false;
-    }
-
     private static int checkPWChar(String PW) {
         boolean chEng = false, chNum = false, chSp = false;
         int errCode = 0;
@@ -227,9 +219,56 @@ public class LogIn {
         return errCode;
     }
 
+    private static boolean includeBlank(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            if (Character.isWhitespace(str.charAt(i)))
+                return true;
+        }
+        return false;
+    }
+
     private static void logIn() {
-        System.out.println("1. Log in"); // 지울 것
+        String ID = logInID();
+        logInPW(ID);
+        // 7.2 실행 및 ID 전달
+    }
+
+    private static String logInID() {
         System.out.print("ID: ");
         String ID = scan.nextLine();
+        if (ID.length() == 0 || includeBlank(ID) || !existID(ID)) {
+            System.out.println("This ID is not registered");
+            logInID();
+        }
+
+        return ID;
+    }
+
+    private static void logInPW(String ID) {
+        System.out.print("PW: ");
+        String PW = scan.nextLine();
+        if(PW.length() == 0 || includeBlank(PW) || !matchID(ID, PW)){
+            System.out.println("ID and password do not match");
+            logInPW(ID);
+        }
+    }
+
+    private static boolean matchID(String ID, String PW) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("./memberInfo.txt"));
+            String str;
+            while ((str = br.readLine()) != null){
+                // str에 개행 전까지 받아옴
+//                System.out.println(str);
+                if (str.equals(ID)){
+                    String compPW = br.readLine();
+                    return compPW.equals(PW);
+                }
+            }
+            br.close();
+        } catch (IOException e) {
+//            System.out.println("existID : 파일 없는데 뭐 어쩌라고");
+        }
+        return false;
     }
 }
