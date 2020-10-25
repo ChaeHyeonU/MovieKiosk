@@ -1,3 +1,5 @@
+package moive;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -240,8 +242,8 @@ public class PriceManager {
 		int x=0;
 		for(String[] a : this.seatInformStr) {
 			SeatInf += "[";
-			for(String b : a) SeatInf+=(b+",");
-			if(x == this.seatInformStr.length-1) SeatInf += "],";
+			SeatInf += (a[0]+","+a[1]);
+			if(x != this.seatInformStr.length-1) SeatInf += "],";
 			else SeatInf += "]";
 			x++;
 		}
