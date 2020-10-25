@@ -184,7 +184,7 @@ public class MovieManager {
 							startMin = Integer.parseInt(startTime[1]);
 							endHour = Integer.parseInt(endTime[0]);
 							endMin = Integer.parseInt(endTime[1]);
-							System.out.println(startHour);
+							//System.out.println(startHour);
 							
 							String[] addTime = dataArr[3].split("~");
 							String[] addStartTime = addTime[0].split(":");
@@ -243,7 +243,7 @@ public class MovieManager {
 		case "already exist data":
 			System.out.println("This data already exists in the datafile, Please enter another data");
 			break;
-		case "Time erroe":
+		case "Time error":
 			System.out.println("you can't add data that has same theater at the same time");
 			break;
 		}
