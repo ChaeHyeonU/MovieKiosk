@@ -1,7 +1,4 @@
-package movie;
-
 public class TestMain {
-
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Movie m = new Movie();
@@ -15,10 +12,6 @@ public class TestMain {
 		String[][] str = s.getSelectedSeat();
 		PriceManager price = new PriceManager(LogIn.nowID, m.getInform(), str);
 		price.priceCalculator();
-		
-		MovieManager.managerInput();
-		
-			
 	}
 }
 

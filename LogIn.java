@@ -1,5 +1,3 @@
-package movie;
-
 import java.io.*;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -234,14 +232,17 @@ public class LogIn {
 
     private static void logIn(Movie m) {
         nowID = logInID();
-        logInPW(nowID);
-        // 7.2 실행 및 nowID 전달
-        Select.selectOrder(m);
+        if (logInPW(nowID) == 0) // 관리자라면 메뉴 실행
+            MovieManager.managerInput();
+        else // 7.2 실행 및 nowID 전달
+            Select.selectOrder(m);
     }
 
     private static String logInID() {
         System.out.print("ID: ");
         String ID = scan.nextLine();
+        if (ID.equals("admin")) // 존재 검사하기 전에 관리자면 바로 비번입력
+            return ID;
         if (ID.length() == 0 || includeBlank(ID) || !existID(ID)) {
             System.out.println("This ID is not registered");
             ID = logInID();
@@ -250,13 +251,16 @@ public class LogIn {
         return ID;
     }
 
-    private static void logInPW(String ID) {
+    private static int logInPW(String ID) {
         System.out.print("PW: ");
         String PW = scan.nextLine();
-        if(PW.length() == 0 || includeBlank(PW) || !matchID(ID, PW)){
+        if (ID.equals("admin") && PW.equals("secret123")) // 관리자 계정일 때
+            return 0;
+        else if(PW.length() == 0 || includeBlank(PW) || !matchID(ID, PW)){
             System.out.println("ID and password do not match");
             logInPW(ID);
         }
+        return 1;
     }
 
     private static boolean matchID(String ID, String PW) {
