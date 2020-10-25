@@ -5,9 +5,8 @@ public class TestMain {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Movie m = new Movie();
-		LogIn.inputOrder(m);
-		
-		SelectSeat s = new SelectSeat("1","10/19","12:30~14:30"); //»ó¿µ°ü , ³¯Â¥ , ½Ã°£
+		LogIn.inputOrder(m);		
+		SelectSeat s = new SelectSeat(m.getInform2()[0],m.getInform2()[1],m.getInform2()[2]); //ï¿½ó¿µ°ï¿½ , ï¿½ï¿½Â¥ , ï¿½Ã°ï¿½
 		s.GetSeat();
 		s.showSeat();
 		s.SelectPerson();

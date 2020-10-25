@@ -19,6 +19,7 @@ public class Movie {
 	private ArrayList<String> datelist = new ArrayList<String>();
 	private int sizeoflist;		
 	private String inform;
+	private String[] inform2;
 	
 	public Movie() {
 		this.sizeoflist = 0;
@@ -27,6 +28,11 @@ public class Movie {
 	public String getInform() {
 		return inform;
 	}
+	
+	public String[] getInform2() {
+		return inform2;
+	}
+	
 	protected void initmovielist() {				
 		try {
 			File seatfile = new File("./SeatInf.txt");		
@@ -153,6 +159,7 @@ public class Movie {
 				if(inputarr[0].equals(datelist.get(i)) && inputarr[1].equals(startTime(timelist.get(i)))
 						&& inputarr[3].equals(screenlist.get(i))) {
 					makeInform(i);
+					makeInform2(i);
 					System.out.print("Select : ");
 					printlist(i);
 					return true;
@@ -299,6 +306,15 @@ public class Movie {
 		result += timelist.get(i) + "\r\n";
 		result += datelist.get(i);
 		inform = result;
+		return result;
+	}
+	
+	private String[] makeInform2(int i) {
+		String[] result = new String[3];
+		result[0] = screenlist.get(i);
+		result[1] = datelist.get(i);
+		result[2] = timelist.get(i);
+		inform2 = result;
 		return result;
 	}
 	
