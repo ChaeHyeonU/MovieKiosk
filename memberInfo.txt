@@ -1,0 +1,14 @@
+{
+leeje1
+asdfasdf
+10/19,12:30~14:30,2D,ABC,Screen 1[B1,0,][B2,1,],
+10/19,12:30~14:30,2D,ABC,Screen 1
+}
+{
+leeje2
+asdfasdf
+}
+{
+abcde1
+abcdefghe1!
+}

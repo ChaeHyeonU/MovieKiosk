@@ -1,3 +1,5 @@
+package movie;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -204,7 +206,8 @@ public class PriceManager {
 			}
 			else System.out.println("Could you please re-Enter");
 		}
-		Select.selectOrder();
+		Movie m = new Movie();
+		Select.selectOrder(m);
 	}
 	
 	private int userFind(){  // user 정보를 찾는 메소드

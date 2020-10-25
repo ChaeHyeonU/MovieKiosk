@@ -1,10 +1,12 @@
+package movie;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
 public class Select {
-    protected static void selectOrder(){
+    protected static void selectOrder(Movie m){
 //        1. Reservation details 2. Movie reservation 3. Log out
 //        >>
         System.out.println("1. Reservation details 2. Movie reservation 3. Log out");
@@ -13,31 +15,32 @@ public class Select {
         String order = scan.nextLine();
         switch (order){
             case "1":
-                details();
+                details(m);
                 break;
             case "2":
-//                reserve(); // 7.3
+            	m.initmovielist();
+            	m.searchselect();
                 break;
             case "3":
-                LogIn.inputOrder();
+                LogIn.inputOrder(m);
                 break;
             default:
                 System.out.println("ERROR : Wrong input");
-                selectOrder();
+                selectOrder(m);
                 break;
         }
     }
 
-    private static void details() {
+    private static void details(Movie m) {
         printReport(LogIn.nowID);
-        // ë‚´ì—­ì´ ì—†ìœ¼ë©´ printReportê°€ ì•„ë¬´ ì¶œë ¥ë„ ëª»í•˜ê³  ë°‘ì„ ì‹¤í–‰
+        // ³»¿ªÀÌ ¾øÀ¸¸é printReport°¡ ¾Æ¹« Ãâ·Âµµ ¸øÇÏ°í ¹ØÀ» ½ÇÇà
         System.out.print("Press Enter to go to previous page.");
         try {
             System.in.read();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        selectOrder();
+        selectOrder(m);
     }
 
     private static void printReport(String nowID) {
@@ -45,23 +48,23 @@ public class Select {
             BufferedReader br = new BufferedReader(new FileReader("./memberInfo.txt"));
             String str;
             while ((str = br.readLine()) != null){
-                // strì— ê°œí–‰ ì „ê¹Œì§€ ë°›ì•„ì˜´
+                // str¿¡ °³Çà Àü±îÁö ¹Ş¾Æ¿È
 //                System.out.println(str);
                 if (str.equals("{")) {
                     if (br.readLine().equals(nowID)){
-                        br.readLine(); // ë¹„ë°€ë²ˆí˜¸
+                        br.readLine(); // ºñ¹Ğ¹øÈ£
                         break;
                     }
                 }
             }
 
             String detail;
-            while (!(detail = br.readLine()).equals("}")){ // "}"ê°€ ì•„ë‹ ë•Œ ê¹Œì§€
+            while (!(detail = br.readLine()).equals("}")){ // "}"°¡ ¾Æ´Ò ¶§ ±îÁö
                 System.out.println(detail);
             }
             br.close();
         } catch (IOException e) {
-//            System.out.println("existID : íŒŒì¼ ì—†ëŠ”ë° ë­ ì–´ì©Œë¼ê³ ");
+//            System.out.println("existID : ÆÄÀÏ ¾ø´Âµ¥ ¹¹ ¾îÂ¼¶ó°í");
         }
     }
 }
