@@ -52,7 +52,7 @@ public class MovieManager {
 		}
 		
 	}
-	//중복 데이터 입력시 입력 불가 기능 추가필요
+	
 	public static void add() {
 		System.out.println("Please enter date(month/date)");
 		String date = sc.nextLine();
@@ -139,11 +139,11 @@ public class MovieManager {
 			}
 			break;
 		case 6:
-			if(!data.equals("cancle") && !data.equals("save") && !data.equals("change")) {
+			if(!data.equals("cancle") && !data.equals("save") && !data.equals("change") && !data.equals("SAVE") && !data.equals("Save")) {
 				errorPrint("answer error\n");
 				saveDataFile(1, null);
 				break;
-			} else if(data.equals("save")) {
+			} else if(data.equals("save") || data.equals("SAVE") || data.equals("Save") ) {
 				dataCheck(8, saveData);
 				//saveDataFile(2, null);
 			}else if(data.contentEquals("change")) {
@@ -158,23 +158,58 @@ public class MovieManager {
 			}
 			break;
 		case 8://add할때 중복검사 부분 
-			String[] dataArr = saveData.split(" ");			
+			String[] dataArr = saveData.split(" ");				
 			String[][] movie_info_list = moiveInf();
 			//System.out.println(findData(dataArr));
 			if(findData(dataArr) < movie_info_list.length) {
 				errorPrint("already exist data");	
 				add();
 			}else {
+				dataCheck(9,saveData);
 				saveDataFile(2, null);
 			}
 			break;
+		case 9: //같은 관에서 겹치는 시간에 상영불가
+			dataArr = saveData.split(" ");	
+			 movie_info_list = moiveInf();
+				for(int i = 0; i < movie_info_list.length; i++ ) {
+					//System.out.println(dataArr[4]);
+					//System.out.println(movie_info_list[i][4]);
+					if(movie_info_list[i][4].equals(dataArr[4]) && movie_info_list[i][0].equals(dataArr[0])) {//같은 날짜 같은 상영관
+							//System.out.println(i);
+							time = movie_info_list[i][3].split("~"); //시간 확인
+							startTime = time[0].split(":");
+							endTime = time[1].split(":");
+							startHour = Integer.parseInt(startTime[0]);
+							startMin = Integer.parseInt(startTime[1]);
+							endHour = Integer.parseInt(endTime[0]);
+							endMin = Integer.parseInt(endTime[1]);
+							System.out.println(startHour);
+							
+							String[] addTime = dataArr[3].split("~");
+							String[] addStartTime = addTime[0].split(":");
+							String[] addEndTime = addTime[1].split(":");
+							int addSH = Integer.parseInt(addStartTime[0]);
+							int addSM = Integer.parseInt(addStartTime[1]);
+							int addEH = Integer.parseInt(addEndTime[0]);
+							int addEM = Integer.parseInt(addEndTime[1]);
+							
+							if(endHour > addSH) {
+								errorPrint("Time error");
+								add();
+							}else if(endHour == addSH) {
+								if(endMin > addSM) {
+									errorPrint("Time error");
+									add();
+								}
+							}
+						}
+					}break;
+				}
+				
 		}
-		
-			
-		
-	}
 	
-	//영화가 끝나는시간이 시작시간보다 빠른경우의 오류추가
+	
 	public static void errorPrint(String error) {
 		switch(error) 
 		{
@@ -208,13 +243,15 @@ public class MovieManager {
 		case "already exist data":
 			System.out.println("This data already exists in the datafile, Please enter another data");
 			break;
-		
+		case "Time erroe":
+			System.out.println("you can't add data that has same theater at the same time");
+			break;
 		}
 	}
 	
 	
 	
-	public static void saveDataFile(int num, String[][] arr) {
+	public static void saveDataFile(int num, String[][] arr) { //데이터 파일에 저장하는 메소드
 		switch(num) {
 		case 1:
 			System.out.println("Do you want to save?(Save/Cancel)");
@@ -374,7 +411,7 @@ public class MovieManager {
 		return line;
 	}
 	
-	private static void showMovieList( ) {
+	private static void showMovieList( ) { //파일에 있는 영화 리스트 보여주기
 		String[][] movie_info_list = moiveInf();
 		for(int i = 0; i < movie_info_list.length; i ++) {
 			for(int j = 0; j < movie_info_list[i].length; j++) {
