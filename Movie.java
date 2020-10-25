@@ -1,4 +1,3 @@
-package movie;
 
 import java.io.IOException;
 import java.io.File;
@@ -27,7 +26,7 @@ public class Movie {
 	public String getInform() {
 		return inform;
 	}
-	protected void initmovielist() {				
+	private void initmovielist() {				
 		try {
 			File seatfile = new File("./SeatInf.txt");		
 			FileReader filereader = new FileReader(seatfile);			
@@ -70,9 +69,9 @@ public class Movie {
 		
 	}
 	
-	public void searchselect() {
+	private void searchselect() {
 		
-		//·çÇÁ		
+		//����		
 		clearScreen();
 		printlist();
 		while(true) {
@@ -90,17 +89,17 @@ public class Movie {
 //				printlist();
 //			}
 //				
-			// "¿µÈ­ÀÌ¸§" °Ë»ö
+			// "��ȭ�̸�" �˻�
 			if(isTitleinput(input)) {
 				searchbyTitle(input);
 			}
 			
-			// ¿ù/ÀÏ °Ë»ö
+			// ��/�� �˻�
 			else if(isDateinput(input)) {
 				searchbyDate(input);
 			}	
 			
-			// ¿µÈ­¼±ÅÃ
+			// ��ȭ����
 			else if(isSelectinput(input)) {
 				if(selectMovie(input)) {
 					break;
@@ -275,7 +274,7 @@ public class Movie {
 	
 	
 	
-	//¸ñ·Ï ÀüÃ¼ Ãâ·Â
+	//��� ��ü ���
 	private void printlist() {
 		for(int i = 0 ; i < sizeoflist; i++) {
 			System.out.println(datelist.get(i) + " " + timelist.get(i) +
@@ -284,7 +283,7 @@ public class Movie {
 		}
 	}
 	
-	//¸ñ·Ï Áß i¹øÂ°¸¸ Ãâ·Â
+	//��� �� i��°�� ���
 	private void printlist(int i) {
 		System.out.println(datelist.get(i) + " " + timelist.get(i) +
 				" Screen " + screenlist.get(i) + " " + titlelist.get(i) + 
@@ -293,16 +292,16 @@ public class Movie {
 	
 	private String makeInform(int i) {
 		String result;
-		result = screenlist.get(i) + "\r\n" ;
-		result += titlelist.get(i) + "\r\n";
-		result += dimensionlist.get(i) + "\r\n";
-		result += timelist.get(i) + "\r\n";
-		result += datelist.get(i);
+		result = screenlist.get(i) + " ";
+		result += titlelist.get(i) + " ";
+		result += dimensionlist.get(i) + " ";
+		result += timelist.get(i) + " ";
+		result += datelist.get(i) + " ";
 		inform = result;
 		return result;
 	}
 	
-	//È­¸é clear
+	//ȭ�� clear
 	public static void clearScreen() {  
 		for(int i =0 ; i < 50 ; i++)
 			System.out.println();

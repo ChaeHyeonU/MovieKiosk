@@ -1,4 +1,4 @@
-package movie;
+package moive;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -206,8 +206,7 @@ public class PriceManager {
 			}
 			else System.out.println("Could you please re-Enter");
 		}
-		Movie m = new Movie();
-		Select.selectOrder(m);
+		Select.selectOrder();
 	}
 	
 	private int userFind(){  // user 정보를 찾는 메소드

@@ -288,4 +288,6 @@ public class SelectSeat {
 			System.out.println();
 		}
 	}
+	
+	
 }
