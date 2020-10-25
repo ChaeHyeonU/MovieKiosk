@@ -204,7 +204,7 @@ public class PriceManager {
 			}
 			else System.out.println("Could you please re-Enter");
 		}
-		//여기에 7.2로 넘어가는 함수 입력
+		Select.selectOrder();
 	}
 	
 	private int userFind(){  // user 정보를 찾는 메소드
@@ -236,6 +236,16 @@ public class PriceManager {
 	
 	private void ReserveUserSave() {   // 예매 내역을 유저 정보에 저장 
 		String movieInf = this.movieSort();
+		String SeatInf="";
+		int x=0;
+		for(String[] a : this.seatInformStr) {
+			SeatInf += "[";
+			for(String b : a) SeatInf+=(b+",");
+			if(x == this.seatInformStr.length-1) SeatInf += "],";
+			else SeatInf += "]";
+			x++;
+		}
+		movieInf  += SeatInf;
 		
 		File file = new File("memberInfo.txt");
 		String temp = "";
@@ -273,7 +283,7 @@ public class PriceManager {
 			int A = (int)ch[0] - 65;
 			String number = "";
 			for(int q=1;q<ch.length;q++) number += ch[q];
-			seat_detail[A][Integer.parseInt(number)] = '1';
+			seat_detail[A][Integer.parseInt(number)-1] = '1';
 		}
 		String str = "";
 		for(int i=0;i<seat_detail.length;i++) {
@@ -284,6 +294,7 @@ public class PriceManager {
 			str = "";
 		}
 		for(int i=0;i<seatline.length;i++) str = str + seatline[i] + "\t";
+		
 		
 		File file = new File("SeatInf.txt");
 		String temp = "";
@@ -325,3 +336,4 @@ public class PriceManager {
 		
 	}
 }
+
