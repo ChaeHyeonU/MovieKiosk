@@ -6,22 +6,36 @@
 
 package manager;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MovieManager {
 	static Scanner sc = new Scanner(System.in);
-	public static String input;
+	public static String inputData;
+	public static String saveData;
+	static String fileName = "MovieInfo.txt";
+	public String[] movieInf;
+	public String[] editInfo;
+	
+	
 	
 	public static void main(String[] args) {
 		managerInput();
 	}
 	
-	//데이터 파일 확인하는 부분 추가
+
 	public static void managerInput() {
-//		1. Add 2. Edit
-//		Input :
 		System.out.println("1. Add 2. Edit");
-		System.out.print("입력 :");
+		System.out.print(">>");
 		String input = sc.nextLine();
 		switch (input)
 		{
@@ -29,7 +43,7 @@ public class MovieManager {
 			add();
 			break;
 		case "2" :
-			edit();
+			editData();
 			break;
 		default:
 			System.out.println("ERROR : Wrong Input");
@@ -38,59 +52,51 @@ public class MovieManager {
 		}
 		
 	}
-	//기획서에는 하나씩 단계별로 받는걸로 되어있지만 한번에 받아도 되지 않을까
+	//중복 데이터 입력시 입력 불가 기능 추가필요
 	public static void add() {
-		System.out.println("Please enter date(month/date) time(00:00 ~ 23:59) theaterNum movieTitle theaterType");
-		input = sc.nextLine();
-		String[] dataArr = input.split(" "); 
-		String date = dataArr[0];
-		String time =  dataArr[1];
-		int theaterNum = Integer.parseInt(dataArr[2]);
-		String movieTitle = dataArr[3];
-		String theaterType = dataArr[4];
-	
-		dataCheck(1, date);
-		dataCheck(2, time);
-		dataCheck(3, Integer.toString(theaterNum));
-		dataCheck(4, movieTitle);
-		dataCheck(5, theaterType);
+		System.out.println("Please enter date(month/date)");
+		String date = sc.nextLine();
+		dataCheck(5, date);
+		System.out.println("Please enter time(00:00 ~ 23:59)");
+		String time = sc.nextLine();
+		dataCheck(4, time);
+		System.out.println("Please enter theater number");
+		String theaterNum = sc.nextLine();
+		dataCheck(1, theaterNum);
+		System.out.println("Please enter movie title");
+		String movieTitle = sc.nextLine();
+		dataCheck(2, movieTitle);
+		System.out.println("Please enter theter type(2D,3D)");
+		String theaterType = sc.nextLine();
+		dataCheck(3, theaterType);
+		saveData = theaterNum +" "+ movieTitle +" "+ theaterType +" "+ time +" "+ date;
+		inputData = date +" "+ time +" Screen"+theaterNum +" "+ movieTitle +" "+ theaterType;
+
+		saveDataFile(1, null);
 	}
 	
 	
 	
-	//순서도에는 영화제목과 날짜로 선택하는걸로 되어있는데 기획서에는 데이터 5개 다 넣어서 한번에 선택
-	public static void edit() {
-		System.out.println("Please enter data that you want to edit\n"
-				+ "date(month/date) time(00:00 ~ 23:59) theaterNum movieTitle theaterType");
-		input = sc.nextLine();
-		String[] dataArr = input.split(" "); 
-		String date = dataArr[0];
-		String time =  dataArr[1];
-		int theaterNum = Integer.parseInt(dataArr[2]);
-		String movieTitle = dataArr[3];
-		String theaterType = dataArr[4];
-		
-		editData();
-		
-	}
-	
+
 	public static void dataCheck(int num, String data) {
 		switch(num) 
 		{
 		case 1:
-			String[] date = data.split("/");
-			int month = Integer.parseInt(date[0]);
-			int day = Integer.parseInt(date[1]);
-			if(month < 0 || month > 12) { 
-				errorPrint("month range error");
-				add();
-			}
-			if(day < 0 || day > 31) { 
-				errorPrint("day range error");
+			break;
+		case 2:
+			if(data.length() < 0) {
+				System.out.println(data.length());
+				errorPrint("title length error");
 				add();
 			}
 			break;
-		case 2:
+		case 3:
+			if(!data.equals("2D") && !data.equals("3D") && !data.equals("4D")) {
+				errorPrint("theatertype error");
+				add();
+			}
+			break;
+		case 4:
 			String[] time = data.split("~");
 			String[] startTime = time[0].split(":");
 			String[] endTime = time[1].split(":");
@@ -119,29 +125,29 @@ public class MovieManager {
 				add();
 			}
 			break;
-		case 3:
-			break;
-		case 4:
-			if(data.length() < 0) {
-				System.out.println(data.length());
-				errorPrint("title length error");
-				add();
-			}
-			break;
 		case 5:
-			if(!data.equals("2D") && !data.equals("3D") && !data.equals("4D")) {
-				errorPrint("theatertype error");
+			String[] date = data.split("/");
+			int month = Integer.parseInt(date[0]);
+			int day = Integer.parseInt(date[1]);
+			if(month < 0 || month > 12) { 
+				errorPrint("month range error");
 				add();
 			}
-			saveDataFile(1);
+			if(day < 0 || day > 31) { 
+				errorPrint("day range error");
+				add();
+			}
 			break;
 		case 6:
-			if(!data.equals("cancle") && !data.equals("save")) {
-				errorPrint("answer error");
-				saveDataFile(1);
+			if(!data.equals("cancle") && !data.equals("save") && !data.equals("change")) {
+				errorPrint("answer error\n");
+				saveDataFile(1, null);
 				break;
 			} else if(data.equals("save")) {
-				saveDataFile(2);
+				dataCheck(8, saveData);
+				//saveDataFile(2, null);
+			}else if(data.contentEquals("change")) {
+				break;
 			}
 			break;
 		case 7:
@@ -151,7 +157,20 @@ public class MovieManager {
 			break;
 			}
 			break;
+		case 8://add할때 중복검사 부분 
+			String[] dataArr = saveData.split(" ");			
+			String[][] movie_info_list = moiveInf();
+			//System.out.println(findData(dataArr));
+			if(findData(dataArr) < movie_info_list.length) {
+				errorPrint("already exist data");	
+				add();
+			}else {
+				saveDataFile(2, null);
+			}
+			break;
 		}
+		
+			
 		
 	}
 	
@@ -184,60 +203,186 @@ public class MovieManager {
 			System.out.println("you should enter Save or Cancle");
 			break;
 		case "editData error":
-			System.out.println("you should enter date, time, theaterNum, movieTitle or theaterType");
+			System.out.println("you should enter date, time, theaterNum, movieTitle and theaterType");
+			break;
+		case "already exist data":
+			System.out.println("This data already exists in the datafile, Please enter another data");
+			break;
 		
 		}
 	}
 	
-	public static void saveDataFile(int num) {
+	
+	
+	public static void saveDataFile(int num, String[][] arr) {
 		switch(num) {
 		case 1:
 			System.out.println("Do you want to save?(Save/Cancel)");
-			System.out.println(input);
+			System.out.println(inputData);
+			System.out.print(">>");
 			String answer = sc.nextLine();
 			dataCheck(6, answer);
 		case 2:
-			//데이터 파일에 저장하는 부분 추가
+			String[] dataArr = saveData.split(" "); 
+			String theaterNum = dataArr[0];
+			String movieTitle = dataArr[1];
+			String theaterType = dataArr[2];
+			String time =  dataArr[3];
+			String date = dataArr[4];
+			
+	
+			
+			try {
+				BufferedWriter bw = new BufferedWriter(new FileWriter(fileName, true));
+				bw.write("<");
+				bw.newLine();
+				bw.write(theaterNum);
+				bw.newLine();
+				bw.write(movieTitle);
+				bw.newLine();
+				bw.write(theaterType);
+				bw.newLine();
+				bw.write(time);
+				bw.newLine();
+				bw.write(date);
+				bw.newLine();
+				bw.write(">");
+				bw.newLine();
+				bw.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			managerInput();
+		case 3:
+			File file = new File(fileName);
+			String temp = "";
+			try {
+				BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
+				for(int i=0; i < arr.length; i++) {
+					bw.write("<");
+					bw.newLine();
+					for(int j = 0; j < arr[i].length; j++) {
+						bw.write(arr[i][j]);
+						bw.newLine();
+					}
+					bw.write(">");
+					bw.newLine();
+				}
+				bw.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	
 		
 	}
 	
-	//데이터파일에 저장하는 부분 추가
-	public static void editData() {
-		System.out.println("Please enter data that you want to change\n"
-				+ "(date, time, theaterNum, movieTitle theaterType)");
-		String editData = sc.nextLine();
-		dataCheck(7, editData);
-		System.out.println("please enter change " + editData);
-		String data = sc.nextLine();
-		switch(editData)
-		{
-		case "date" :
-			dataCheck(1,data);
-			break;
-		case "time" :
-			dataCheck(2,data);
-			break;
-		case "theaterNum" :
-			dataCheck(3,data);
-			break;
-		case "movieTtitle" :
-			dataCheck(4,data);
-			break;
-		case "theaterType" :
-			dataCheck(5,data);
-			break;
-		}
-		System.out.println("you want to change " + editData + " to " + data + "?(Save/Cancel)");
-		String answer = sc.nextLine();
-		dataCheck(6,answer);
+	
+	public static void editData() {//변경전 데이터와 변경후 데이터를 입력받는 메소드
+		File file = new File(fileName);
+		if(file.exists()) {
+			showMovieList();
+			
+			System.out.println("Please enter data that you want to edit\n"
+					+ "(theaterNum, movieTitle, theaterType , time, date)");
+			String data = sc.nextLine();
+			String[] dataArr = data.split(" "); 
+			for(int i = 0; i < dataArr.length; i++) {
+				dataCheck(i+1, dataArr[i]);
+			}
+			
+			System.out.println("Please enter data that you want to change\n"
+					+ "(theaterNum, movieTitle, theaterType , time, date)");
+			String editData = sc.nextLine();
+			String[] edataArr = editData.split(" "); 
+			for(int i = 0; i < edataArr.length; i++) {
+				dataCheck(i+1, edataArr[i]);
+			}
 		
-		saveDataFile(2);
+	        System.out.println("you want to change (" + data + ") to (" + editData + ")?(Change/Cancel)");
+			System.out.print(">>");
+			String answer = sc.nextLine();
+			dataCheck(6,answer);
+			saveDataFile(3, changeData(dataArr, edataArr));
+			managerInput();
+		} else {
+			System.out.println("There is no DataFile. Please add File and try again");
+		}
 	}
 	
+	
+	public static String[][] changeData(String[] arr, String[] changeArr) {//데이터를 변경하는 메소드
+		String[][] movie_info_list  = moiveInf();
+		int changeLine = findData(arr);
+		for(int i = 0; i < arr.length; i++) {
+			movie_info_list[changeLine][i] = changeArr[i];
+		}
+		return movie_info_list;
+	}
+	
+	
+	private static String[][] moiveInf(){  // 영화 정보를 찾고 영화 정보 배열에 저장
+		ArrayList<String> info_list = new ArrayList<String>();
+		try {
+			File movieInf = new File(fileName);
+			BufferedReader br = new BufferedReader(new FileReader(movieInf));
+			String temp;
+			while((temp = br.readLine())!=null) info_list.add(temp);
+			br.close();
+		}catch (FileNotFoundException e) {
+			System.out.println("file does not exist");
+			e.printStackTrace();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+		int x=0;
+		int y=0;
+		for(String a : info_list) {if(a.equals(">")) x++;}
+		String[][] info_list_detail = new String[x][5];
+		x=0;
+		for(String a : info_list) {
+			if(a.equals(">")) {x++;y=0;}
+			else if(!a.equals("<")){
+				info_list_detail[x][y] = a;
+				y++;
+			}
+		}
+		
+		return info_list_detail;
+	}
+	
+	private static int findData(String[] arr) {  //변경할 영화를 찾는 메소드
+		String[][] movie_info_list = moiveInf();
+		int find, line = movie_info_list.length+1;
+		for(int i =0;i<movie_info_list.length;i++) {
+			find=0;
+			for(int q=0;q<movie_info_list[i].length;q++) {
+				if(movie_info_list[i][q].equals(arr[q])) {
+					find++;
+				}
+				else break;
+			}
+			if(find == 5) {
+				line = i;
+				break;
+			}
+		}
+		//System.out.println(line);
+		return line;
+	}
+	
+	private static void showMovieList( ) {
+		String[][] movie_info_list = moiveInf();
+		for(int i = 0; i < movie_info_list.length; i ++) {
+			for(int j = 0; j < movie_info_list[i].length; j++) {
+				System.out.print(movie_info_list[i][j]);
+				System.out.print(" ");
+			}
+			System.out.println();
+		}
+	}
 
-	
-	
 }
