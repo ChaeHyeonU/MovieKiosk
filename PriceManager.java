@@ -279,14 +279,16 @@ public class PriceManager {
 		String[][] seat_list_detail = this.seatMoiveInf();
 		String[] seatline = seat_list_detail[this.findSeat()][5].split("\t");
 		char[][] seat_detail = new char[seatline.length][seatline[0].toCharArray().length];
-		for(int i=0;i<seat_detail.length;i++) {for(int q=0;q<seat_detail[i].length;q++) seat_detail[i][q] = '0';}
-		
+		char[] tempCh;
+		for(int i=0;i<seat_detail.legth;i++){
+			tempCh = seatline.toCharArray();
+			for(int q=0;q<seat_detail[i].length;q++) seat_detail[i][q] = tempCh[q];
+		}
 		for(int i=0;i<this.seatInformStr.length;i++) {
 			char[] ch = this.seatInformStr[i][0].toCharArray();
-			int A = (int)ch[0] - 65;
 			String number = "";
 			for(int q=1;q<ch.length;q++) number += ch[q];
-			seat_detail[A][Integer.parseInt(number)-1] = '1';
+			seat_detail[(int)ch[0] - 65][Integer.parseInt(number)-1] = '1';
 		}
 		String str = "";
 		for(int i=0;i<seat_detail.length;i++) {
