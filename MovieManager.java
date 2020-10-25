@@ -28,6 +28,7 @@ public class MovieManager {
 	
 	
 	
+	
 	public static void main(String[] args) {
 		managerInput();
 	}
@@ -158,20 +159,24 @@ public class MovieManager {
 			}
 			break;
 		case 8://add할때 중복검사 부분 
-			String[] dataArr = saveData.split(" ");				
-			String[][] movie_info_list = moiveInf();
-			//System.out.println(findData(dataArr));
-			if(findData(dataArr) < movie_info_list.length) {
-				errorPrint("already exist data");	
-				add();
-			}else {
-				dataCheck(9,saveData);
-				saveDataFile(2, null);
+			File file = new File(fileName);
+			if(file.exists()) {
+				String[] dataArr = saveData.split(" ");				
+				String[][] movie_info_list = moiveInf();
+				//System.out.println(findData(dataArr));
+				if(findData(dataArr) < movie_info_list.length) {
+					
+					errorPrint("already exist data");	
+					add();
+				}else {
+					dataCheck(9,saveData);
+					saveDataFile(2, null);
+				}
 			}
 			break;
 		case 9: //같은 관에서 겹치는 시간에 상영불가
-			dataArr = saveData.split(" ");	
-			 movie_info_list = moiveInf();
+			String[] dataArr = saveData.split(" ");	
+			String[][] movie_info_list = moiveInf();
 				for(int i = 0; i < movie_info_list.length; i++ ) {
 					//System.out.println(dataArr[4]);
 					//System.out.println(movie_info_list[i][4]);
@@ -259,6 +264,7 @@ public class MovieManager {
 			System.out.print(">>");
 			String answer = sc.nextLine();
 			dataCheck(6, answer);
+			
 		case 2:
 			String[] dataArr = saveData.split(" "); 
 			String theaterNum = dataArr[0];
