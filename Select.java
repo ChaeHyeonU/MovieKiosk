@@ -1,10 +1,12 @@
+package movie;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
 public class Select {
-    protected static void selectOrder(Movie m){
+    protected static void selectOrder(){
 //        1. Reservation details 2. Movie reservation 3. Log out
 //        >>
         System.out.println("1. Reservation details 2. Movie reservation 3. Log out");
@@ -13,23 +15,24 @@ public class Select {
         String order = scan.nextLine();
         switch (order){
             case "1":
-                details(m);
+                details();
                 break;
             case "2":
+            	Movie m = new Movie();
             	m.initmovielist();
             	m.searchselect();
                 break;
             case "3":
-                LogIn.inputOrder(m);
+                LogIn.inputOrder();
                 break;
             default:
                 System.out.println("ERROR : Wrong input");
-                selectOrder(m);
+                selectOrder();
                 break;
         }
     }
 
-    private static void details(Movie m) {
+    private static void details() {
         printReport(LogIn.nowID);
         // 내역이 없으면 printReport가 아무 출력도 못하고 밑을 실행
         System.out.print("Press Enter to go to previous page.");
@@ -38,7 +41,7 @@ public class Select {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        selectOrder(m);
+        selectOrder();
     }
 
     private static void printReport(String nowID) {
@@ -50,7 +53,7 @@ public class Select {
 //                System.out.println(str);
                 if (str.equals("{")) {
                     if (br.readLine().equals(nowID)){
-                        br.readLine();  // 비밀번호
+                        br.readLine(); // 비밀번호
                         break;
                     }
                 }
@@ -62,7 +65,7 @@ public class Select {
             }
             br.close();
         } catch (IOException e) {
-//            System.out.println("existID : 파일 없는데 뭐 어쩌라고");
+////            System.out.println("existID : 파일 없는데 뭐 어쩌라고");
         }
     }
 }
