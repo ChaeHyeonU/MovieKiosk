@@ -279,7 +279,7 @@ public class PriceManager {
 		char[][] seat_detail = new char[seatline.length][seatline[0].toCharArray().length];
 		char[] tempCh;
 		for(int i=0;i<seat_detail.legth;i++){
-			tempCh = seatline.toCharArray();
+			tempCh = seatline[i].toCharArray();
 			for(int q=0;q<seat_detail[i].length;q++) seat_detail[i][q] = tempCh[q];
 		}
 		for(int i=0;i<this.seatInformStr.length;i++) {
