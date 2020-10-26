@@ -596,10 +596,6 @@ public class MovieManager {
 		}
 	}
 
-	
-	  public static void main(String[] args) {
-	   managerInput();
-	 }
-	 
+
 
 }
