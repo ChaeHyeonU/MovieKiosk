@@ -1,3 +1,5 @@
+package movie;
+
 import java.io.*;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -9,7 +11,7 @@ public class LogIn {
 	/*
 	 * public static void main(String[] args) { inputOrder(); }
 	 */
-    protected static void inputOrder(Movie m){
+    protected static void inputOrder(){
 //        1. Log in 2. Sign up 3. Exit
 //        입력:
         System.out.println("1. Log in 2. Sign up 3. Exit");
@@ -17,22 +19,22 @@ public class LogIn {
         String order = scan.nextLine();
         switch (order){
             case "1":
-                logIn(m);
+                logIn();
                 break;
             case "2":
-                signUp(m);
+                signUp();
                 break;
             case "3":
                 System.exit(0);
                 break;
             default:
                 System.out.println("ERROR : Wrong input");
-                inputOrder(m);
+                inputOrder();
                 break;
         }
     }
 
-    private static void signUp(Movie m) {
+    private static void signUp() {
         String ID = signUpID(0);
         String PW = signUpPW(0);
         // 데이터 파일에 회원정보 등록
@@ -44,7 +46,7 @@ public class LogIn {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        inputOrder(m);
+        inputOrder();
     }
 
     private static void register(String ID, String PW) {
@@ -230,12 +232,12 @@ public class LogIn {
         return false;
     }
 
-    private static void logIn(Movie m) {
+    private static void logIn() {
         nowID = logInID();
         if (logInPW(nowID) == 0) // 관리자라면 메뉴 실행
             MovieManager.managerInput();
         else // 7.2 실행 및 nowID 전달
-            Select.selectOrder(m);
+            Select.selectOrder();
     }
 
     private static String logInID() {

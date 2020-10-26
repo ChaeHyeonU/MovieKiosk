@@ -1,3 +1,5 @@
+package movie;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -204,8 +206,7 @@ public class PriceManager {
 			}
 			else System.out.println("Could you please re-Enter");
 		}
-		Movie m = new Movie();
-		Select.selectOrder(m);
+		Select.selectOrder();
 	}
 	
 	private int userFind(){  // user 정보를 찾는 메소드
@@ -278,7 +279,7 @@ public class PriceManager {
 		String[] seatline = seat_list_detail[this.findSeat()][5].split("\t");
 		char[][] seat_detail = new char[seatline.length][seatline[0].toCharArray().length];
 		char[] tempCh;
-		for(int i=0;i<seat_detail.legth;i++){
+		for(int i=0;i<seat_detail.length;i++){
 			tempCh = seatline[i].toCharArray();
 			for(int q=0;q<seat_detail[i].length;q++) seat_detail[i][q] = tempCh[q];
 		}

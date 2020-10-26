@@ -1,3 +1,5 @@
+package movie;
+
 import java.io.IOException;
 import java.io.File;
 import java.nio.file.Path;
@@ -10,17 +12,22 @@ import java.util.ArrayList;
 
 public class Movie {
 	
-	private ArrayList<String> screenlist = new ArrayList<String>();
-	private ArrayList<String> titlelist = new ArrayList<String>();
-	private ArrayList<String> dimensionlist = new ArrayList<String>();
-	private ArrayList<String> timelist = new ArrayList<String>();
-	private ArrayList<String> datelist = new ArrayList<String>();
+	private ArrayList<String> screenlist;
+	private ArrayList<String> titlelist;
+	private ArrayList<String> dimensionlist;
+	private ArrayList<String> timelist;
+	private ArrayList<String> datelist;
 	private int sizeoflist;		
-	private String inform;
-	private String[] inform2;
+	public static String inform;
+	public static String[] inform2;
 	
 	public Movie() {
 		this.sizeoflist = 0;
+		this.screenlist = new ArrayList<String>();
+		this.titlelist = new ArrayList<String>();
+		this.dimensionlist = new ArrayList<String>();
+		this.timelist = new ArrayList<String>();
+		this.datelist = new ArrayList<String>();
 	}
 	
 	public String getInform() {
@@ -31,7 +38,7 @@ public class Movie {
 		return inform2;
 	}
 	
-	protected void initmovielist() {				
+	public void initmovielist() {				
 		try {
 			File seatfile = new File("./SeatInf.txt");		
 			FileReader filereader = new FileReader(seatfile);			
@@ -89,11 +96,6 @@ public class Movie {
 			String input = scan.nextLine();
 			input = input.trim();
 
-//			if(input.equals("back")) {
-//				clearScreen();
-//				printlist();
-//			}
-//				
 			// "¿µÈ­ÀÌ¸§" °Ë»ö
 			if(isTitleinput(input)) {
 				searchbyTitle(input);
@@ -107,6 +109,13 @@ public class Movie {
 			// ¿µÈ­¼±ÅÃ
 			else if(isSelectinput(input)) {
 				if(selectMovie(input)) {
+					//
+					SelectSeat s = new SelectSeat(inform2[0],inform2[1],inform2[2]);
+					s.GetSeat();
+					s.showSeat();
+					s.SelectPerson();
+					s.SelSeat();
+					s.SeatDivision();
 					break;
 				}
 			}

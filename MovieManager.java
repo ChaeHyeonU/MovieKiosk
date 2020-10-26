@@ -4,6 +4,8 @@
 //edit에서 에디트할 데이터 선택하는 부분이 수정(5개 데이터 한꺼번에 -> 수정할 데이터 선택)
 //시간 입력시 영화 시작시간보다 끝나는시간이 빠른경우의 오류 추가
 
+package movie;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;

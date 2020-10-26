@@ -1,3 +1,5 @@
+package movie;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -225,6 +227,9 @@ public class SelectSeat {
 			System.out.println("You insert Wrong Number");
 			SeatDivision();
 		}
+		String[][] str = SelectedSeat;
+		PriceManager price = new PriceManager(LogIn.nowID, Movie.inform , str);
+		price.priceCalculator();
 	}
 	
 	public String[][] getSelectedSeat() {
