@@ -193,7 +193,7 @@ public class PriceManager {
 		System.out.println("Enter \"o\" if you pay, or \"x\" if you don't pay");
 		while(true) {
 			System.out.print(">>");
-			String str = sc.next();
+			String str = sc.nextLine();
 			if(str.equals("o")) {
 				System.out.println("You have chosen to pay");
 				ReserveUserSave();
