@@ -1,5 +1,3 @@
-package movie;
-
 import java.io.IOException;
 import java.io.File;
 import java.nio.file.Path;

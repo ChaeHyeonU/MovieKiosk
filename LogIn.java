@@ -1,5 +1,3 @@
-package movie;
-
 import java.io.*;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -7,10 +5,9 @@ import java.util.regex.Pattern;
 public class LogIn {
     static String nowID;
     static Scanner scan = new Scanner(System.in);
-
-	/*
-	 * public static void main(String[] args) { inputOrder(); }
-	 */
+//    public static void main(String[] args) {
+//        inputOrder();
+//    }
     protected static void inputOrder(){
 //        1. Log in 2. Sign up 3. Exit
 //        입력:
@@ -41,11 +38,7 @@ public class LogIn {
         register(ID, PW);
 
         System.out.print("Registration is complete. Press Enter to go to the login.");
-        try {
-            System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        scan.nextLine();
         inputOrder();
     }
 

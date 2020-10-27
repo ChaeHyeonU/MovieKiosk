@@ -1,17 +1,15 @@
-package movie;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
 public class Select {
+    static Scanner scan = new Scanner(System.in);
     protected static void selectOrder(){
 //        1. Reservation details 2. Movie reservation 3. Log out
 //        >>
         System.out.println("1. Reservation details 2. Movie reservation 3. Log out");
         System.out.print(">> ");
-        Scanner scan = new Scanner(System.in);
         String order = scan.nextLine();
         switch (order){
             case "1":
@@ -36,11 +34,7 @@ public class Select {
         printReport(LogIn.nowID);
         // 내역이 없으면 printReport가 아무 출력도 못하고 밑을 실행
         System.out.print("Press Enter to go to previous page.");
-        try {
-            System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        scan.nextLine();
         selectOrder();
     }
 
