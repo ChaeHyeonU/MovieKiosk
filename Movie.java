@@ -82,7 +82,7 @@ public class Movie {
 	
 	public void searchselect() {
 		
-		//·çÇÁ		
+		//화면 전환
 		clearScreen();
 		printlist();
 		while(true) {
@@ -95,20 +95,21 @@ public class Movie {
 			String input = scan.nextLine();
 			input = input.trim();
 
-			// "¿µÈ­ÀÌ¸§" °Ë»ö
+			// "영화이름"으로 검색
 			if(isTitleinput(input)) {
 				searchbyTitle(input);
 			}
 			
-			// ¿ù/ÀÏ °Ë»ö
+			// 날짜 입력으로 검색
 			else if(isDateinput(input)) {
 				searchbyDate(input);
 			}	
 			
-			// ¿µÈ­¼±ÅÃ
+			// 영화 선택
 			else if(isSelectinput(input)) {
 				if(selectMovie(input)) {
-					//
+					
+					//좌석선택으로 이동
 					SelectSeat s = new SelectSeat(inform2[0],inform2[1],inform2[2]);
 					s.GetSeat();
 					s.showSeat();
@@ -125,6 +126,7 @@ public class Movie {
 		}
 	}
 	
+	//영화제목입력으로 영화 찾기
 	private void searchbyTitle(String input) {
 		int equalnum = 0;
 		input = input.replace("\"","");
@@ -142,6 +144,7 @@ public class Movie {
 		}
 	}
 	
+	//날짜 입력으로 영화 찾기
 	private void searchbyDate(String input) {
 		int equalnum = 0;
 		for(int i = 0 ; i < sizeoflist; i++) {					
@@ -160,6 +163,7 @@ public class Movie {
 		}
 	}
 	
+	//영화섵택
 	private boolean selectMovie(String input) {
 		String[] inputarr = input.split("\\s");
 		if(isDate(inputarr[0]) && isTime(inputarr[1])) {
@@ -180,11 +184,13 @@ public class Movie {
 		return false;
 	}
 	
+	//시작시간만 따오긴
 	private String startTime(String s) {
 		String result = s.substring(0, s.lastIndexOf("~"));
 		return result;
 	}
 	
+	//수인지 확인
 	public static boolean isNumeric(String s) {
 	    try {
 	        Integer.parseInt(s);
@@ -194,6 +200,7 @@ public class Movie {
 	    }
 	}
 	
+	//날짜 입력이 올바른지 확인
 	public static boolean isDate(String str){
 		String[] inputarr = str.split("/");
 		if(!isNumeric(inputarr[0])) {
@@ -222,6 +229,7 @@ public class Movie {
 		
 	}
 	
+	//시간 입력이 올바른지 확인
 	public static boolean isTime(String str) {
 		String[] inputarr = str.split(":");
 		if(!isNumeric(inputarr[0])) {
@@ -249,6 +257,7 @@ public class Movie {
 		}
 	}
 	
+	//영화제목 입력시 입력형태가 올바른지 홧인
 	private boolean isTitleinput(String input) {
 		if(input.indexOf("\"") == 0 && input.charAt(input.length()-1) == '\"') {
 			return true;
@@ -258,6 +267,7 @@ public class Movie {
 		}
 	}
 	
+	//날짜 입력시 입력형태가 올바른지 확인
 	private boolean isDateinput(String input) {
 		String[] inputarr = input.split("\\s");
 		if(input.contains("/") && inputarr.length == 1) {
@@ -268,6 +278,7 @@ public class Movie {
 		}
 	}
 	
+	//시간 입력시 입력형태가 올바른지 확인
 	private boolean isTimeinput(String input) {
 		if(input.contains(":")) {
 			return true;
@@ -277,6 +288,7 @@ public class Movie {
 		}
 	}
 	
+	//선택 입력시 입력형태가 올바른지 확인
 	private boolean isSelectinput(String input) {
 		
 		String[] inputarr = input.split("\\s");
@@ -292,7 +304,7 @@ public class Movie {
 	
 	
 	
-	//¸ñ·Ï ÀüÃ¼ Ãâ·Â
+	// 전체 영화목록 출력
 	private void printlist() {
 		for(int i = 0 ; i < sizeoflist; i++) {
 			System.out.println(datelist.get(i) + " " + timelist.get(i) +
@@ -301,13 +313,14 @@ public class Movie {
 		}
 	}
 	
-	//¸ñ·Ï Áß i¹øÂ°¸¸ Ãâ·Â
+	// 영화목록 i번째만 출력
 	private void printlist(int i) {
 		System.out.println(datelist.get(i) + " " + timelist.get(i) +
 				" Screen " + screenlist.get(i) + " " + titlelist.get(i) + 
 				" (" + dimensionlist.get(i) + ")" );
 	}
 	
+	//결제페이지로 넘겨줄 정보 생성
 	private String makeInform(int i) {
 		String result;
 		result = screenlist.get(i) + "\r\n" ;
@@ -319,6 +332,7 @@ public class Movie {
 		return result;
 	}
 	
+	//좌석선택페이지로 넘겨줄 정보 생성
 	private String[] makeInform2(int i) {
 		String[] result = new String[3];
 		result[0] = screenlist.get(i);
@@ -328,7 +342,7 @@ public class Movie {
 		return result;
 	}
 	
-	//È­¸é clear
+	// 화면 clear
 	public static void clearScreen() {  
 		for(int i =0 ; i < 50 ; i++)
 			System.out.println();
