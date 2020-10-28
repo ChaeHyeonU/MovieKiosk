@@ -71,7 +71,8 @@ public class Movie {
 			}
 			bufReader.close();
 		} catch(FileNotFoundException e) {
-			System.out.println(e);
+			System.out.println("Error : File not found [./SeatInf.txt]");
+			Select.selectOrder();
 		} catch(IOException e) {
 			System.out.println(e);
 		}		
@@ -150,7 +151,9 @@ public class Movie {
 			}
 		}
 		if(equalnum == 0) {
-			System.out.println("Error : there are no date data [" + input + "]");
+			if(isDate(input)) {
+				System.out.println("Error : there are no date data [" + input + "]");
+			}
 		}
 		else {
 			System.out.println("found " + equalnum );
@@ -169,7 +172,9 @@ public class Movie {
 					printlist(i);
 					return true;
 				}
+				
 			}
+			System.out.println("Error : There are no equal movie data");
 			return false;
 		}
 		return false;
