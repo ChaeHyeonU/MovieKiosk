@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
 
-
 public class SelectSeat {
 	Path path = Paths.get("./SeatInf.txt");
 	private int adult;
@@ -49,6 +48,14 @@ public class SelectSeat {
 			System.out.println("Error : Insert Number Only");
 		}
 		this.child = sc.nextInt();
+		if(this.adult ==0 && this.child ==0) {
+			System.out.println("Error : You must insert at least one");
+			SelectPerson();
+		}
+		else if(this.adult <0 || this.child < 0) {
+			System.out.println("Error : You must insert more than 0");
+			SelectPerson();
+		}
 	}
 	
 	public boolean isExist1(String[] array_seat) { //이전에 선택한 자리 혹은 없는 자리가 아닌지
@@ -132,6 +139,35 @@ public class SelectSeat {
 		return true;
 	}
 	
+	public boolean isRight(String[] str) {
+		int length = str.length;
+		for(int i=0; i<length-1; i++) {
+			String[] splitStr = str[i+1].split("");
+			int splitLength = splitStr.length;
+			if(splitLength == 2) {
+				if((splitStr[0].trim().charAt(0) <65 || splitStr[0].trim().charAt(0) >90) 
+					|| (splitStr[1].trim().charAt(0) < 48 || splitStr[1].trim().charAt(0) >57 )) 
+					return false;
+			}
+			else if(splitLength ==3) {
+				if((splitStr[0].trim().charAt(0) <65 || splitStr[0].trim().charAt(0) >90) 
+					|| (splitStr[1].trim().charAt(0) < 48 || splitStr[1].trim().charAt(0) >57 ) 
+					||(splitStr[2].trim().charAt(0) < 48 || splitStr[2].trim().charAt(0) >57))
+					return false;				
+			}
+		}
+		return true;
+	}
+	
+	public boolean blank(String select) {
+		String[] newStr = select.split("");
+		for(int i=0; i<newStr.length-1; i++) {
+			if(newStr[i].equals(" ") && newStr[i+1].equals(" "))
+				return false;
+		}
+		return true;
+	}
+	
 	public void SelSeat() {
 		Scanner sc = new Scanner(System.in);
 		int num = this.adult + this.child;
@@ -143,12 +179,18 @@ public class SelectSeat {
 			String select = sc.nextLine();
 			String[] str = select.split(" ");
 			
-			if(str[0].equals("add") || str[0].equals("Add")) {
+			if(!blank(select)) {
+				System.out.println("Error : You must insert blank once");
+			}
+			else if(!isRight(str)) {
+				System.out.println("Error : You must insert uppercase alphatbet + number");
+			}
+			else if(str[0].equals("add") || str[0].equals("Add")) {
 				if(str.length <2) { 
 					System.out.println("Error : Insert Seat");
 				}
 				else {
-					if(num < seat.size()) { 
+					if(num <= seat.size() || num <str.length-1) { 
 						System.out.println("Error : You can't add");
 					}
 					else {
@@ -181,8 +223,11 @@ public class SelectSeat {
 			}
 			
 			else if(str[0].equals("next") || str[0].equals("Next")) {
-				if(num != seat.size()) {
-					System.out.println("Select seat before go next");
+				if(str.length != 1) {
+					System.out.println("Error : Next command must be written alone");
+				}
+				else if(num != seat.size()) {
+					System.out.println("Error : Select seat before go next");
 				}
 				else {
 					for(int i=0; i<seat.size(); i++) {
@@ -194,6 +239,7 @@ public class SelectSeat {
 			}
 			else
 				System.out.println("Error : Insert [add] [delete] [next] Only");
+			
 		}
 	}
 	
