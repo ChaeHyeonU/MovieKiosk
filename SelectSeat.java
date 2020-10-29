@@ -16,6 +16,7 @@ public class SelectSeat {
 	private int child;
 	private int hight;
 	private int width;
+	private int remainSeat;
 	private String screenNum;
 	private String date;
 	private String time;
@@ -41,19 +42,30 @@ public class SelectSeat {
 			System.out.println("Error : Insert Number Only");
 		}
 		this.adult = sc.nextInt();
-		
+		if(this.adult > remainSeat) {
+			System.out.println("Error : There are no seats for the selected number of people");
+			SelectPerson();
+		}
 		System.out.println("Child >> ");
 		while(!sc.hasNextInt()) {
 			sc.next();
 			System.out.println("Error : Insert Number Only");
 		}
 		this.child = sc.nextInt();
+		if(this.child > remainSeat) {
+			System.out.println("Error : There are no seats for the selected number of people");
+			SelectPerson();
+		}
 		if(this.adult ==0 && this.child ==0) {
 			System.out.println("Error : You must insert at least one");
 			SelectPerson();
 		}
 		else if(this.adult <0 || this.child < 0) {
 			System.out.println("Error : You must insert more than 0");
+			SelectPerson();
+		}
+		else if(this.adult + this.child > remainSeat) {
+			System.out.println("Error : There are no seats for the selected number of people");
 			SelectPerson();
 		}
 	}
@@ -97,7 +109,7 @@ public class SelectSeat {
 			else {
 				if(array_seat.length == 2) {
 					int seat_width = (int)array_seat[1].charAt(0) - 48;
-					if(seat_width > this.width || seat_width > 9 || seat_width < 0) {
+					if(seat_width > this.width || seat_width > 9 || seat_width <= 0) {
 						System.out.println("Error : does not exist seat");
 						return false;
 					}
@@ -105,7 +117,7 @@ public class SelectSeat {
 				else if(array_seat.length == 3) {
 					int seat_width1 = (int)array_seat[1].charAt(0) - 48;
 					int seat_width2 = (int)array_seat[2].charAt(0) - 48;
-					if(seat_width1 * 10 + seat_width2 > this.width || seat_width1 > 9 || seat_width1 < 0 || seat_width2 > 9 || seat_width2 < 0) {
+					if(seat_width1 * 10 + seat_width2 > this.width || seat_width1 > 9 || seat_width1 <= 0 || seat_width2 > 9 || seat_width2 < 0) {
 						System.out.println("Error : does not exist seat");
 						return false;
 					}
@@ -168,6 +180,17 @@ public class SelectSeat {
 		return true;
 	}
 	
+	public boolean deleteExist(String[] str, Vector<String> seat) {
+		for(int i=0; i<str.length-1; i++) {
+			for(int j=0; j<seat.size(); j++) {
+				if(str[i+1].equals(seat.get(j))) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	public void SelSeat() {
 		Scanner sc = new Scanner(System.in);
 		int num = this.adult + this.child;
@@ -185,7 +208,7 @@ public class SelectSeat {
 			else if(!isRight(str)) {
 				System.out.println("Error : You must insert uppercase alphatbet + number");
 			}
-			else if(str[0].equals("add") || str[0].equals("Add")) {
+			else if(str[0].equals("add")) {
 				if(str.length <2) { 
 					System.out.println("Error : Insert Seat");
 				}
@@ -202,12 +225,15 @@ public class SelectSeat {
 				}
 			}
 			
-			else if(str[0].equals("delete") || str[0].equals("Delete")) {
+			else if(str[0].equals("delete")) {
 				if(str.length <2) { 
 					System.out.println("Error : Insert Seat");
 				}
 				else if(seat.size() == 0) { 
 					System.out.println("Error : Select seat before delete");
+				}
+				else if(!deleteExist(str, seat)) {
+					System.out.println("Error : You did not select this seat before");
 				}
 				else { 
 					
@@ -222,7 +248,7 @@ public class SelectSeat {
 				}
 			}
 			
-			else if(str[0].equals("next") || str[0].equals("Next")) {
+			else if(str[0].equals("next")) {
 				if(str.length != 1) {
 					System.out.println("Error : Next command must be written alone");
 				}
@@ -263,12 +289,12 @@ public class SelectSeat {
 					break;
 				}
 				else {
-					System.out.println("Please insert Only 'Adult' or 'Child'");
+					System.out.println("Error : Please insert Only 'Adult' or 'Child'");
 				}
 			}
 		}
 		if(a != this.adult || c != this.child) {
-			System.out.println("You insert Wrong Number");
+			System.out.println("Error : You insert Wrong Age");
 			SeatDivision();
 		}
 		String[][] str = SelectedSeat;
@@ -334,5 +360,7 @@ public class SelectSeat {
 			}
 			System.out.println();
 		}
+		remainSeat = width * hight - noSeat1.size();
+		System.out.println(remainSeat);
 	}
 }
