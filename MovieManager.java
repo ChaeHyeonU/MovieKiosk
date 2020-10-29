@@ -1,19 +1,22 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.text.ParseException;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class MovieManager {
 	static Scanner sc = new Scanner(System.in);
 	public static String inputData;
 	public static String saveData;
+	public static String selectData;
+	public static String editData;
 	static String fileName = "./SeatInf.txt";
 	static String screenfileName = "./ScreenInf.txt";
 	public String[] movieInf;
@@ -34,7 +37,7 @@ public class MovieManager {
 			add("date");
 			break;
 		case "2":
-			editData();
+			editData("select");
 			break;
 		default:
 			System.out.println("ERROR : Wrong Input You should enter 1 od 2");
@@ -50,28 +53,28 @@ public class MovieManager {
 			System.out.println("Please enter date(month/date)");
 			System.out.print(">>");
 			date = sc.nextLine();
-			dataCheck(5, date, null);
+			dataCheck(5, date, "add");
 		case "time":
 			System.out.println("Please enter time(1:1~24:0)");
 			System.out.print(">>");
 			time = sc.nextLine();
-			dataCheck(4, time, null);
+			dataCheck(4, time, "add");
 		case "theaterNum":
 			System.out.println("Please enter theater number");
 			System.out.print(">>");
 			theaterNum = sc.nextLine();
-			dataCheck(1, theaterNum, null);
+			dataCheck(1, theaterNum, "add");
 
 		case "movieTitle":
 			System.out.println("Please enter movie title");
 			System.out.print(">>");
 			movieTitle = sc.nextLine();
-			dataCheck(2, movieTitle, null);
+			dataCheck(2, movieTitle, "add");
 		case "theaterType":
 			System.out.println("Please enter theter type(2D,3D,4D)");
 			System.out.print(">>");
 			theaterType = sc.nextLine();
-			dataCheck(3, theaterType, null);
+			dataCheck(3, theaterType, "add");
 			
 		}
 		saveData = theaterNum + " " + movieTitle + " " + theaterType + " " + time + " " + date;
@@ -86,28 +89,57 @@ public class MovieManager {
 			try {
 				if (Integer.parseInt(data) < 1 || Integer.parseInt(data) > screenInf().length) {
 					errorPrint("theaterNum outof bound");
-					add("theaterNum");
+					if(ae.equals("add")) {
+						add("theaterNum");
+					}else if(ae.equals("edit")) {
+						editData("change");
+					}
+					
 				}
 			}catch(NumberFormatException e) {
 				errorPrint("theaterNum format error");
-				add("theaterNum");
+				if(ae.equals("add")) {
+					add("theaterNum");
+				}else if(ae.equals("edit")) {
+					editData("change");
+				}
+			}catch(NullPointerException e) {
+				errorPrint("theaterNum format error");
+				if(ae.equals("add")) {
+					add("theaterNum");
+				}else if(ae.equals("edit")) {
+					editData("change");
+				}
 			}
 			break;
 		case 2:
 			if (data.length() < 0) {
 				System.out.println(data.length());
 				errorPrint("title length error");
-				add("movieTitle");
+				if(ae.equals("add")) {
+					add("movieTitle");
+				}else if(ae.equals("edit")) {
+					editData("change");
+				}
+				
 			}
 			if (spaceCheck(data) == true) {
 				errorPrint("movieTitle format error");
-				add("movieTitle");
+				if(ae.equals("add")) {
+					add("movieTitle");
+				}else if(ae.equals("edit")) {
+					editData("change");
+				}
 			}
 			break;
 		case 3:
 			if (!data.equals("2D") && !data.equals("3D") && !data.equals("4D")) {
 				errorPrint("theatertype error");
-				add("theaterType");
+				if(ae.equals("add")) {
+					add("theaterType");
+				}else if(ae.equals("edit")) {
+					editData("change");
+				}
 			}
 			break;
 		case 4:
@@ -119,43 +151,107 @@ public class MovieManager {
 				int startMin = Integer.parseInt(startTime[1]);
 				int endHour = Integer.parseInt(endTime[0]);
 				int endMin = Integer.parseInt(endTime[1]);
+				String sstartHour = startTime[0];
+				String sstartMin = startTime[1];
+				String sendHour = startTime[0];
+				String sendMin = startTime[1];
+				
+				String start = sstartHour + sstartMin; 
+				String end = sendHour + sendMin; 
+				Date start_movie;
+				Date end_movie;
+				SimpleDateFormat format = new SimpleDateFormat("Hm");
+				
+				
 				if ((startTime[0].length() > 1 && startTime[0].startsWith("0"))
 						|| (startTime[1].length() > 1 && startTime[1].startsWith("0"))
 						|| (endTime[0].length() > 1 && endTime[0].startsWith("0"))
 						|| (endTime[1].length() > 1 && endTime[1].startsWith("0"))) {
 					errorPrint("time start with 0");
+					if(ae.equals("add")) {
+						add("time");
+					}else if(ae.equals("edit")) {
+						editData("change");
+					}
+				}
+				if((startHour == 1 && startMin == 0) || (endHour == 24 && endMin == 1)) {
+					errorPrint("time range error");
 					add("time");
 				}
+				
 				if (startHour < 1 || startHour > 24 || endHour < 1 || endHour > 24) {// 시간오류 시간분오류 시간분순서오류
 					errorPrint("hour range error");
 					if (startMin < 0 || startMin > 59 || endMin < 0 || endMin > 59) {
 						errorPrint("min range error");
 						if (startHour > endHour) {
 							errorPrint("time order error");
-							add("time");
+							if(ae.equals("add")) {
+								add("time");
+							}else if(ae.equals("edit")) {
+								editData("change");
+							}
 						}
-						add("time");
+						if(ae.equals("add")) {
+							add("time");
+						}else if(ae.equals("edit")) {
+							editData("change");
+						}
 					}
-					add("time");
+					if(ae.equals("add")) {
+						add("time");
+					}else if(ae.equals("edit")) {
+						editData("change");
+					}
 				} else if (startMin < 0 || startMin > 59 || endMin < 0 || endMin > 59) {// 분오류 분순서오류
 					errorPrint("min range error");
-					if (startHour > endHour) {
-						errorPrint("time order error");
-						add("time");
+					try {
+						start_movie = format.parse(start);
+						end_movie = format.parse(end);
+						
+						if(end_movie.getTime() < start_movie.getTime()) {
+							errorPrint("time order error");
+							if(ae.equals("add")) {
+								add("time");
+							}else if(ae.equals("edit")) {
+								editData("change");
+							}
+						}
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-					add("time");
 				}
-	
-				if (startHour > endHour) {
-					errorPrint("time order error");// 순서오류
-					add("time");
+
+				try {
+					start_movie = format.parse(start);
+					end_movie = format.parse(end);
+					
+					if(end_movie.getTime() < start_movie.getTime()) {
+						errorPrint("time order error");
+						if(ae.equals("add")) {
+							add("time");
+						}else if(ae.equals("edit")) {
+							editData("change");
+						}
+					}
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}catch (NumberFormatException e) {
 				errorPrint("time format error");
-				add("time");
+				if(ae.equals("add")) {
+					add("time");
+				}else if(ae.equals("edit")) {
+					editData("change");
+				}
 			}catch (ArrayIndexOutOfBoundsException e) {
 				errorPrint("time format error");
-				add("time");
+				if(ae.equals("add")) {
+					add("time");
+				}else if(ae.equals("edit")) {
+					editData("change");
+				}
 			}	
 			break;
 		case 5:
@@ -168,50 +264,86 @@ public class MovieManager {
 					errorPrint("month range error");
 					if (day < 0 || day > 31) {
 						errorPrint("day range error");
-						add("date");
+						if(ae.equals("add")) {
+							add("date");
+						}else if(ae.equals("edit")) {
+							editData("change");
+						}
 					}
-					add("date");
+					if(ae.equals("add")) {
+						add("date");
+					}else if(ae.equals("edit")) {
+						editData("change");
+					}
 				}
 
 				if (day < 0 || day > 31) {
 					errorPrint("day range error");
-					add("date");
+					if(ae.equals("add")) {
+						add("date");
+					}else if(ae.equals("edit")) {
+						editData("change");
+					}
 				}
 				
 				if ((month == 2 ||  month == 4 || month == 6 || month == 9 || month ==11) && (day == 31)) {
 					errorPrint("31 error");
-					add("date");
+					if(ae.equals("add")) {
+						add("date");
+					}else if(ae.equals("edit")) {
+						editData("change");
+					}
 				}
 				if(month == 2 && day == 30) {
 					errorPrint("30 error");
-					add("date");
+					if(ae.equals("add")) {
+						add("date");
+					}else if(ae.equals("edit")) {
+						editData("change");
+					}
 				}
 			}catch(NumberFormatException e) {
 				errorPrint("date Format error");
-				add("date");
+				if(ae.equals("add")) {
+					add("date");
+				}else if(ae.equals("edit")) {
+					editData("change");
+				}
 			}
 			break;
 		case 6:
-			if (!data.equals("cancle") && !data.equals("save") && !data.equals("change") && !data.equals("SAVE")
-					&& !data.equals("Save")) {
-				errorPrint("answer error\n");
-				saveDataFile(1, null);
-				break;
-			} else if (data.equals("save") || data.equals("SAVE") || data.equals("Save")) {
-				if (ae.equals("add")) {
-					dataCheck(8, saveData, "add");
+			if(ae.equals("add")) {
+				if (!data.equals("cancel") && !data.equals("save") && !data.equals("change") && !data.equals("SAVE")
+						&& !data.equals("Save")) {
+					errorPrint("answer error");
+					saveDataFile(1, null);
+					break;
+				} else if (data.equals("save") || data.equals("SAVE") || data.equals("Save")) {
+					if (ae.equals("add")) {
+						dataCheck(8, saveData, "add");
+					}
+				} else if (data.contentEquals("change")) {
+					break;
+				}else if (data.equals("cancel")) {
+					LogIn.inputOrder();
 				}
-			} else if (data.contentEquals("change")) {
-				break;
-			}else if (data.equals("cancle")) {
-				managerInput();
+			}else if(ae.equals("edit")) {
+				if (!data.equals("cancel") && !data.equals("change")) {
+					errorPrint("edit answer error");
+					editData("answer");
+				}else if(data.equals("cancel")) {
+					LogIn.inputOrder();
+				}else if(data.equals("change")) {
+					break;
+				}
 			}
+			
 			break;
 		case 7:
 			if (!data.equals("date") && !data.equals("time") && !data.equals("theaterNum") && !data.equals("movieTitme")
 					&& !data.equals("theaterType")) {
 				errorPrint("editData error");
-				editData();
+				editData("select");
 				break;
 			}
 			break;
@@ -233,108 +365,137 @@ public class MovieManager {
 						saveDataFile(2, null);
 					} else if (ae.equals("edit")) {// 수정할 데이터가 데이터 파일에 없음
 						errorPrint("wrong input data");
-						editData();
+						editData("select");
 					}
 				}
 			}
 			break;
 		case 9: // 같은 관에서 겹치는 시간에 상영불가
-				String[] dataArr = saveData.split(" ");
-				String[][] movie_info_list = moiveInf();
-				for (int i = 0; i < movie_info_list.length; i++) {
-					if (i == findData(dataArr) && ae.equals("edit"))
-						continue;
-					if (movie_info_list[i][4].equals(dataArr[4]) && movie_info_list[i][0].equals(dataArr[0])) {// 같은 날짜 같은 상영관
-						String[] time = movie_info_list[i][3].split("~"); // 시간 확인
-						String [] startTime = time[0].split(":");
-						String[]endTime = time[1].split(":");
-						int startHour = Integer.parseInt(startTime[0]);
-						int startMin = Integer.parseInt(startTime[1]);
-						int endHour = Integer.parseInt(endTime[0]);
-						int endMin = Integer.parseInt(endTime[1]);
-						// System.out.println(startHour);
-
-						String[] addTime = dataArr[3].split("~");
-						String[] addStartTime = addTime[0].split(":");
-						String[] addEndTime = addTime[1].split(":");
-						int addSH = Integer.parseInt(addStartTime[0]);
-						int addSM = Integer.parseInt(addStartTime[1]);
-						int addEH = Integer.parseInt(addEndTime[0]);
-						int addEM = Integer.parseInt(addEndTime[1]);
-
-						if (endHour > addSH) {
-							//System.out.println("1");
-							errorPrint("Time error");
-							if (ae.equals("add")) {
-								add("date");
-							}else {
-								editData();
-							}
-						} else if (endHour == addSH) {
-							if (endMin > addSM) {
-								//System.out.println("1");
-								errorPrint("Time error");
-								if (ae.equals("add")) {
-									add("date");
-								}else {
-									editData();
-								}
-						}
-					}
-				}
-			}
-			break;
-		case 10:
-			int line = Integer.parseInt(theaterNum);
-			String[] screenSit = screenLine(line);
-			int possible4D = Integer.parseInt(screenSit[1]);
-			if ((possible4D == 0) && (theaterType.equals("4D"))) {
-				errorPrint("type error");
-				add("teaterType");
-			}
-			break;
-		case 11: // 같은 관에서 겹치는 시간에 상영불가
-			dataArr = data.split(" ");
-			movie_info_list = moiveInf();
+			String[] dataArr = saveData.split(" ");
+			String[][] movie_info_list = moiveInf();
 			for (int i = 0; i < movie_info_list.length; i++) {
 				if (i == findData(dataArr) && ae.equals("edit"))
 					continue;
 				if (movie_info_list[i][4].equals(dataArr[4]) && movie_info_list[i][0].equals(dataArr[0])) {// 같은 날짜 같은 상영관
-					
 					String[] time = movie_info_list[i][3].split("~"); // 시간 확인
-					String[] startTime = time[0].split(":");
+					String [] startTime = time[0].split(":");
 					String[] endTime = time[1].split(":");
-					int startHour = Integer.parseInt(startTime[0]);
-					int startMin = Integer.parseInt(startTime[1]);
-					int endHour = Integer.parseInt(endTime[0]);
-					int endMin = Integer.parseInt(endTime[1]);
-					
-
 					String[] addTime = dataArr[3].split("~");
 					String[] addStartTime = addTime[0].split(":");
 					String[] addEndTime = addTime[1].split(":");
-					int addSH = Integer.parseInt(addStartTime[0]);
-					int addSM = Integer.parseInt(addStartTime[1]);
-					int addEH = Integer.parseInt(addEndTime[0]);
-					int addEM = Integer.parseInt(addEndTime[1]);
 
-					if (endHour > addSH || addEH > startHour) {
-						errorPrint("Time error");
-						editData();
-					} else if (endHour == addSH) {
-						if (endMin > addSM) 
+					String startHour = startTime[0];
+					String startMin = startTime[1];
+					String endHour = endTime[0];
+					String endMin = endTime[1];
+					String addstartHour = addStartTime[0];
+					String addstartMin = addStartTime[1];
+					String addendHour = addEndTime[0];
+					String addendMin = addEndTime[1];
+					//ystem.out.println( startHour  startMin endHour  endMin);
+					
+					String start =  startHour + startMin; 
+					String end =  endHour + endMin; 
+					String addstart =  addstartHour + addstartMin; 
+					String addend =  addendHour + addendMin; 
+					
+					SimpleDateFormat format = new SimpleDateFormat("Hm");
+
+					try {
+						Date start_movie = format.parse(start);
+						Date end_movie = format.parse(end);
+						Date add_start_movie = format.parse(addstart);
+						Date add_end_movie = format.parse(addend);
+						
+						
+						if(add_end_movie.getTime() > start_movie.getTime() || end_movie.getTime() > add_start_movie.getTime()){
 							errorPrint("Time error");
-							editData();
+							if (ae.equals("add")) {
+								add("date");
+							}else {
+								editData("change");
+							}
+						}
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			}
+		}
+		break;
+	case 10:
+		int line = Integer.parseInt(theaterNum);
+		String[] screenSit = screenLine(line);
+		int possible4D = Integer.parseInt(screenSit[1]);
+		if ((possible4D == 0) && (theaterType.equals("4D"))) {
+			errorPrint("type error");
+			add("teaterType");
+		}
+		break;
+	case 11: // 같은 관에서 겹치는 시간에 상영불가
+		dataArr = data.split(" ");
+		movie_info_list = moiveInf();
+		for (int i = 0; i < movie_info_list.length; i++) {
+			//System.out.println("i is " + i + " line is " + (findData(dataArr)-3));
+			if (i != findData(dataArr)-2) {
+				if (movie_info_list[i][4].equals(dataArr[4]) && movie_info_list[i][0].equals(dataArr[0])) {// 같은 날짜 같은 상영관
+					
+					String[] time = movie_info_list[i][3].split("~"); // 시간 확인
+					String [] startTime = time[0].split(":");
+					String[] endTime = time[1].split(":");
+					String[] addTime = dataArr[3].split("~");
+					String[] addStartTime = addTime[0].split(":");
+					String[] addEndTime = addTime[1].split(":");
+
+					String startHour = startTime[0];
+					String startMin = startTime[1];
+					String endHour = endTime[0];
+					String endMin = endTime[1];
+					String addstartHour = addStartTime[0];
+					String addstartMin = addStartTime[1];
+					String addendHour = addEndTime[0];
+					String addendMin = addEndTime[1];
+					//ystem.out.println( startHour  startMin endHour  endMin);
+					
+					String start =  startHour + startMin; 
+					String end =  endHour + endMin; 
+					String addstart =  addstartHour + addstartMin; 
+					String addend =  addendHour + addendMin; 
+					
+					SimpleDateFormat format = new SimpleDateFormat("Hm");
+
+					try {
+						Date start_movie = format.parse(start);
+						Date end_movie = format.parse(end);
+						Date add_start_movie = format.parse(addstart);
+						Date add_end_movie = format.parse(addend);
+						
+						
+						if(add_end_movie.getTime() > start_movie.getTime() || end_movie.getTime() > add_start_movie.getTime()){
+							errorPrint("Time error");
+							if (ae.equals("add")) {
+								add("date");
+							}else {
+								editData("change");
+							}
+						}
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
-			}break;
+			}
+		}break;
+	case 12:
+		String[] edataArr = data.split(" ");
+		if(edataArr.length != 5) {
+			errorPrint("editData error");
+			editData("change");
+			break;
 		}
 	}
-		
+}
 	
-
-	
-
 	public static void errorPrint(String error) {
 		switch (error) {
 		case "month range error":
@@ -359,10 +520,10 @@ public class MovieManager {
 			System.out.println("Error : Movietitle should be more than one letter");
 			break;
 		case "answer error":
-			System.out.println("Error : You should enter save or cancle");
+			System.out.println("Error : You should enter (save) or (cancel)");
 			break;
 		case "editData error":
-			System.out.println("Error : You should enter date, time, theaterNum, movieTitle and theaterType");
+			System.out.println("Error : You should enter theaterNum, movieTitle(no white space), theaterType, time, date");
 			break;
 		case "already exist data":
 			System.out.println("Error : This data already exists in the datafile, Please enter another data");
@@ -404,9 +565,15 @@ public class MovieManager {
 		case "30 error":
 			System.out.println("Error : There is no 30 in month 2");
 			break;
+		case "edit answer error":
+			System.out.println("Error : You have to enter (change) or (cancel)");
+			break;
+		case "time range error":
+			System.out.println("Error : You cant enter 1:0 also 24:1");
+			break;
 		}
 	}
-
+	
 	public static void saveDataFile(int num, String[][] arr) { // 데이터 파일에 저장하는 메소드
 		switch (num) {
 		case 1:
@@ -456,7 +623,7 @@ public class MovieManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			managerInput();
+			LogIn.inputOrder();
 		case 3:
 			String data = null;
 			for (int i = 0; i < arr.length; i++) {
@@ -486,43 +653,58 @@ public class MovieManager {
 
 	}
 
-	public static void editData() {// 변경전 데이터와 변경후 데이터를 입력받는 메소드
+	public static void editData(String data) {// 변경전 데이터와 변경후 데이터를 입력받는 메소드
 		File file = new File(fileName);
-		if (file.exists()) {
-			showMovieList();
+		String[] dataArr = null;
 
+			switch(data) {
+			case "select":  	
+			if (file.exists()) {
+				showMovieList();
 			System.out.println(
 					"Please enter data that you want to edit\n" + "(theaterNum, movieTitle, theaterType , time, date)");
 			System.out.print(">>");
 			saveData = sc.nextLine();
-			String[] dataArr = saveData.split(" ");
+			dataArr = saveData.split(" ");
 			dataCheck(8, saveData, "edit"); // 입력한 데이터가 파일에 존재하는지
 			for (int i = 0; i < dataArr.length; i++) {
 				dataCheck(i + 1, dataArr[i], null);
 			}
+			selectData = saveData;
+			}else {
+				System.out.println("Error : There is no DataFile. Please add File and try again");
+				managerInput();
+			}
 
+			case "change" :
+		
 			System.out.println("Please enter data that you want to change\n"
 					+ "(theaterNum, movieTitle, theaterType , time, date)");
 			System.out.print(">>");
-			String editData = sc.nextLine();
+			editData = sc.nextLine();
 			String[] edataArr = editData.split(" ");
+			dataCheck(12, editData, null);
 			for (int i = 0; i < edataArr.length; i++) {
-				dataCheck(i + 1, edataArr[i], null);
+				dataCheck(i + 1, edataArr[i], "edit");
 			}
-
+			dataArr =  selectData.split(" ");
+			
+			
+			case "answer" :
+			dataArr =  selectData.split(" ");	
+			edataArr = editData.split(" ");
 			System.out.println("you want to change (" + saveData + ") to (" + editData + ")?(change/cancel)");
 			System.out.print(">>");
 			String answer = sc.nextLine();
-			dataCheck(6, answer, null);
+			dataCheck(6, answer, "edit");
 			dataCheck(11, editData, "edit");
 			saveDataFile(3, changeData(dataArr, edataArr));
-			managerInput();
-		} else {
-			System.out.println("Error : There is no DataFile. Please add File and try again");
-			managerInput();
+			LogIn.inputOrder();
+			} 
+			
 		}
-	}
-
+	
+	
 	public static String[][] changeData(String[] arr, String[] changeArr) {// 데이터를 변경하는 메소드
 		String[][] movie_info_list = moiveInf();
 		int changeLine = findData(arr);
@@ -532,10 +714,11 @@ public class MovieManager {
 		return movie_info_list;
 	}
 
+
 	private static String[] screenInf() {
 		ArrayList<String> seat_list = new ArrayList<String>();
 		try {
-			File seatInf = new File("./src/movie/ScreenInf.txt");
+			File seatInf = new File("./ScreenInf.txt");
 			BufferedReader br = new BufferedReader(new FileReader(seatInf));
 			String temp;
 			while ((temp = br.readLine()) != null)
@@ -562,6 +745,7 @@ public class MovieManager {
 		return screen_line_list;
 
 	}
+
 
 	private static String[][] moiveInf() { // 영화 정보를 찾고 영화 정보 배열에 저장
 		ArrayList<String> info_list = new ArrayList<String>();
@@ -611,23 +795,29 @@ public class MovieManager {
 	private static int findData(String[] arr) { // 변경할 영화를 찾는 메소드
 		String[][] movie_info_list = moiveInf();
 		int find, line = movie_info_list.length + 1;
-		for (int i = 0; i < movie_info_list.length; i++) {
-			find = 0;
-			for (int q = 0; q < movie_info_list[i].length - 1; q++) {
-				if (movie_info_list[i][q].equals(arr[q])) {
-					find++;
-				} else
+		try {
+			for (int i = 0; i < movie_info_list.length; i++) {
+				find = 0;
+				for (int q = 0; q < movie_info_list[i].length - 1; q++) {
+					if (movie_info_list[i][q].equals(arr[q])) {
+						find++;
+					} else
+						break;
+				}
+				if (find == 5) {
+					line = i;
 					break;
+				}
 			}
-			if (find == 5) {
-				line = i;
-				break;
-			}
+			//System.out.println(line);
+			//return line;
+		} catch(ArrayIndexOutOfBoundsException e) {
+			errorPrint("editData error");
+			editData("select");
+			
 		}
-		//System.out.println(line);
 		return line;
 	}
-
 	private static void showMovieList() { // 파일에 있는 영화 리스트 보여주기
 		String[][] movie_info_list = moiveInf();
 		for (int i = 0; i < movie_info_list.length; i++) {
@@ -648,8 +838,6 @@ public class MovieManager {
 	    }
 	    return false;
 	}
-
-
 
 
 }
