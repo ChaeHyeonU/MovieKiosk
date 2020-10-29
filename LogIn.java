@@ -91,8 +91,7 @@ public class LogIn {
 
         System.out.print("ID: ");
         String ID = scan.nextLine();
-        ID = checkID(ID);
-        return ID;
+        return checkID(ID);
     }
 
     private static String checkID(String ID) {
@@ -101,13 +100,13 @@ public class LogIn {
 //        하나 이상의 영문 소문자와 하나 이상의 숫자로 이루어짐
         int ch;
         if (ID.length() < 5 || ID.length() > 20) // 길이
-            ID = signUpID(1);
+            return signUpID(1);
         else if (includeBlank(ID)) // 공백X
-            ID = signUpID(2);
+            return signUpID(2);
         else if ((ch = checkIDChar(ID)) != 0) // 필수 문자만 포함
-            ID = signUpID(ch);
+            return signUpID(ch);
         else if (existID(ID)) // 의미규칙
-            ID = signUpID(6);
+            return signUpID(6);
 
         return ID;
     }
@@ -174,8 +173,7 @@ public class LogIn {
 
         System.out.print("PW: ");
         String PW = scan.nextLine();
-        PW = checkPW(PW);
-        return PW;
+        return checkPW(PW);
     }
 
     private static String checkPW(String PW) {
@@ -185,11 +183,11 @@ public class LogIn {
 //        하나이상의 영문자와 하나이상의 숫자와 하나 이상의 특수문자(~!@#$%^&*_+=-,./?)로 이루어짐
         int ch;
         if (PW.length() < 8 || PW.length() > 16) // 길이
-            PW = signUpPW(1);
+            return signUpPW(1);
         else if (includeBlank(PW)) // 공백X
-            PW = signUpPW(2);
+            return signUpPW(2);
         else if ((ch = checkPWChar(PW)) != 0) // 필수 문자만 포함
-            PW = signUpPW(ch);
+            return signUpPW(ch);
 
         return PW;
     }
@@ -240,7 +238,7 @@ public class LogIn {
             return ID;
         if (ID.length() == 0 || includeBlank(ID) || !existID(ID)) {
             System.out.println("This ID is not registered");
-            ID = logInID();
+            return logInID();
         }
 
         return ID;
@@ -253,7 +251,7 @@ public class LogIn {
             return 0;
         else if(PW.length() == 0 || includeBlank(PW) || !matchID(ID, PW)){
             System.out.println("ID and password do not match");
-            logInPW(ID);
+            return logInPW(ID);
         }
         return 1;
     }
