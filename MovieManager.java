@@ -131,6 +131,14 @@ public class MovieManager {
 					editData("change");
 				}
 			}
+			if(numCheck(data) == false) {
+				errorPrint("movieTitle include num");
+				if(ae.equals("add")) {
+					add("movieTitle");
+				}else if(ae.equals("edit")) {
+					editData("change");
+				}
+			}
 			break;
 		case 3:
 			if (!data.equals("2D") && !data.equals("3D") && !data.equals("4D")) {
@@ -587,7 +595,10 @@ public class MovieManager {
 			System.out.println("Error : You have to enter (change) or (cancel)");
 			break;
 		case "time range error":
-			System.out.println("Error : You cant enter 1:0 also 24:1");
+			System.out.println("Error : You can't enter 1:0 also 24:1");
+			break;
+		case "movieTitle include num":
+			System.out.println("Error : You can't enter movietitle include digit");
 			break;
 		}
 	}
@@ -856,5 +867,20 @@ public class MovieManager {
 	    }
 	    return false;
 	}
-
+	
+	public static boolean numCheck(String data) {//영화제목이 영문자로만 이루어져있는지 판별
+		char tmp;
+		boolean ret = true;
+		for(int i = 0 ; i < data.length() ; i++)
+	    {
+			tmp = data.charAt(i);
+	    
+	        if('0' <= tmp && tmp <= '9') {
+	        	ret = false;
+	    }
+	
+	    }
+		return ret;
+	}
+	
 }
