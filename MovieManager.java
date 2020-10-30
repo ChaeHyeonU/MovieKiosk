@@ -260,9 +260,9 @@ public class MovieManager {
 				int month = Integer.parseInt(date[0]);
 				int day = Integer.parseInt(date[1]);
 				
-				if (month < 0 || month > 12) {
+				if (month < 1 || month > 12) {
 					errorPrint("month range error");
-					if (day < 0 || day > 31) {
+					if (day < 1 || day > 31) {
 						errorPrint("day range error");
 						if(ae.equals("add")) {
 							add("date");
@@ -277,7 +277,7 @@ public class MovieManager {
 					}
 				}
 
-				if (day < 0 || day > 31) {
+				if (day < 1 || day > 31) {
 					errorPrint("day range error");
 					if(ae.equals("add")) {
 						add("date");
