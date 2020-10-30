@@ -231,6 +231,13 @@ public class MovieManager {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+				} else if (startHour > endHour) {
+					errorPrint("time order error");
+					if(ae.equals("add")) {
+						add("time");
+					}else if(ae.equals("edit")) {
+						editData("change");
+					}
 				}
 
 				try {
