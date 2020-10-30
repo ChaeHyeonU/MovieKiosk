@@ -190,6 +190,12 @@ public class MovieManager {
 							}else if(ae.equals("edit")) {
 								editData("change");
 							}
+						}else {
+							if(ae.equals("add")) {
+								add("time");
+							}else if(ae.equals("edit")) {
+								editData("change");
+							}
 						}
 						if(ae.equals("add")) {
 							add("time");
@@ -204,6 +210,11 @@ public class MovieManager {
 					}
 				} else if (startMin < 0 || startMin > 59 || endMin < 0 || endMin > 59) {// 분오류 분순서오류
 					errorPrint("min range error");
+					if(ae.equals("add")) {
+						add("time");
+					}else if(ae.equals("edit")) {
+						editData("change");
+					}
 					try {
 						start_movie = format.parse(start);
 						end_movie = format.parse(end);
@@ -838,6 +849,5 @@ public class MovieManager {
 	    }
 	    return false;
 	}
-
 
 }
