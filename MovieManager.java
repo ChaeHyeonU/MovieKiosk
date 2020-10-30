@@ -113,7 +113,7 @@ public class MovieManager {
 			}
 			break;
 		case 2:
-			if (data.length() < 0) {
+			if (data.length() < 1) {
 				System.out.println(data.length());
 				errorPrint("title length error");
 				if(ae.equals("add")) {
