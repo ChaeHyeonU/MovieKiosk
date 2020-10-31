@@ -235,7 +235,7 @@ public class PriceManager {
 	}
 	
 	private void ReserveUserSave() {   // 예매 내역을 유저 정보에 저장 
-		String movieInf = this.movieSort();
+		String movieInf = this.movieUserInf();
 		String SeatInf="";
 		int x=0;
 		for(String[] a : this.seatInformStr) {
@@ -328,6 +328,14 @@ public class PriceManager {
 		str = str+ this.movieInf[2].charAt(0)+"D,";   // D
 		str = str+ this.movieInf[1]+",";              // 영화 이름
 		str = str+ "Screen "+this.movieInf[0];        // 상영관
+		return str;
+	}
+	private String movieUserInf(){                        // 유저 정보에 저장할 예매 내역
+		String str = this.movieInf[4]+",";            // 날짜 
+		str = str+ this.movieInf[3]+",";              // 시간
+		str = str+ "Screen "+this.movieInf[0]+",";    // 상영관
+		str = str+ this.movieInf[1]+",";              // 영화 이름
+		str = str+ this.movieInf[2].charAt(0)+"D ";   // D
 		return str;
 	}
 	
