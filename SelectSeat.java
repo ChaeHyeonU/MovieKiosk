@@ -361,6 +361,6 @@ public class SelectSeat {
 			System.out.println();
 		}
 		remainSeat = width * hight - noSeat1.size();
-		System.out.println(remainSeat);
+//		System.out.println(remainSeat);
 	}
 }
