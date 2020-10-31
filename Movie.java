@@ -137,10 +137,10 @@ public class Movie {
 			}
 		}
 		if(equalnum == 0) {
-			System.out.println("Error : there are no moive title of [" + input + "]");
+			System.out.println("There are no list of moive title [" + input + "]");
 		}
 		else {
-			System.out.println("found " + equalnum );
+			System.out.println("Found " + equalnum );
 		}
 	}
 	
@@ -155,21 +155,22 @@ public class Movie {
 		}
 		if(equalnum == 0) {
 			if(isDate(input)) {
-				System.out.println("Error : there are no date data [" + input + "]");
+				System.out.println("There are no list of movie date data [" + input + "]");
 			}
 		}
 		else {
-			System.out.println("found " + equalnum );
+			System.out.println("Found " + equalnum );
 		}
 	}
 	
 	//영화섵택
 	private boolean selectMovie(String input) {
 		String[] inputarr = input.split("\\s");
-		if(isDate(inputarr[0]) && isTime(inputarr[1])) {
+		if(isDate(inputarr[0]) && isTime(inputarr[1]) && inputarr[2].equals("Screen")) {
 			for(int i = 0 ; i < sizeoflist; i++) {					
-				if(inputarr[0].equals(datelist.get(i)) && inputarr[1].equals(startTime(timelist.get(i)))
-						&& inputarr[3].equals(screenlist.get(i))) {
+				if(inputarr[0].equals(datelist.get(i)) && 
+						inputarr[1].equals(startTime(timelist.get(i))) && 
+						inputarr[3].equals(screenlist.get(i))) {
 					makeInform(i);
 					makeInform2(i);
 					System.out.print("Select : ");
@@ -178,7 +179,7 @@ public class Movie {
 				}
 				
 			}
-			System.out.println("Error : There are no equal movie data");
+			System.out.println("There are no equal movie data [" + input + "]");
 			return false;
 		}
 		return false;
@@ -199,64 +200,106 @@ public class Movie {
 	        return false;
 	    }
 	}
+	public static boolean isScreenNumeric(String s) {
+	    try {
+	        Integer.parseInt(s);
+	        return true;
+	    } catch (NumberFormatException e) {
+	    	System.out.println("Error : Screen number is not numeric");
+	        return false;
+	    }
+	}
 	
 	//날짜 입력이 올바른지 확인
 	public static boolean isDate(String str){
 		String[] inputarr = str.split("/");
-		if(!isNumeric(inputarr[0])) {
-			System.out.println("Error : month input is not numeric");
-			return false;
+		String error = "Error : ";
+		if(!isNumeric(inputarr[0]) && !isNumeric(inputarr[1])) {
+			error += "Month input and Day input is not numeric";			
+			
 		}
-		else if(!isNumeric(inputarr[1])) {
-			System.out.println("Error : day input is not numeric");
-			return false;
+		else if(!isNumeric(inputarr[0])) {
+			error += "Month input is not numeric";
+			int day = Integer.parseInt(inputarr[1]);
+			if(day < 1 || day > 31) {
+				error += " and Day input is not in 1 ~ 31";
+			}
+		}
+		else if(!isNumeric(inputarr[1])){
+			int month = Integer.parseInt(inputarr[0]);
+			if(month < 1 || month > 12) {
+				error += "Month input is not in 1 ~ 12 and";
+			}
+			error += " Day input is not numeric";
 		}
 		else {
 			int month = Integer.parseInt(inputarr[0]);
-			if(month < 1 || month > 12) {
-				System.out.println("Error : month input is not in 1 ~ 12");
-				return false;
-			}
-			
 			int day = Integer.parseInt(inputarr[1]);
-			if(day < 1 || day > 31) {
-				System.out.println("Error : day input is not in 1 ~ 31");
-				return false;
+			if((month < 1 || month > 12) || (day < 1 || day > 31)) {
+				if((month < 1 || month > 12) && (day < 1 || day > 31)) {
+					error += "Month input is not in 1 ~ 12 and Day input is not in 1 ~ 31";	
+				}
+				else if(month < 1 || month > 12) {
+					error += "Month input is not in 1 ~ 12";
+				}
+				else {
+					error += "Day input is not in 1 ~ 31";
+				}
 			}
-			
-			return true;
+			else 
+				return true;
 		}
+		System.out.println(error);
+		return false;
+
 		
 	}
-	
+
 	//시간 입력이 올바른지 확인
 	public static boolean isTime(String str) {
 		String[] inputarr = str.split(":");
-		if(!isNumeric(inputarr[0])) {
-			System.out.println("Error : hour input is not numeric");
-			return false;
+		String error = "Error : ";
+		if(!isNumeric(inputarr[0]) && !isNumeric(inputarr[1])) {
+			error += "Hour input and Minute input is not numeric";			
+			
 		}
-		else if(!isNumeric(inputarr[1])) {
-			System.out.println("Error : minute input is not numeric");
-			return false;
+		else if(!isNumeric(inputarr[0])) {
+			error += "Hour input is not numeric";
+			int minute = Integer.parseInt(inputarr[1]);
+			if(minute < 0 || minute > 59) {
+				error += " and Minute input is not in 0 ~ 59";
+			}
+		}
+		else if(!isNumeric(inputarr[1])){
+			int hour = Integer.parseInt(inputarr[0]);
+			if(hour < 0 || hour > 23) {
+				error += "Hour input is not in 0 ~ 23 and";
+			}
+			error += " Minute input is not numeric";
 		}
 		else {
 			int hour = Integer.parseInt(inputarr[0]);
-			if(hour < 0 || hour > 23) {
-				System.out.println("Error : hour input is not in 0 ~ 23");
-				return false;
+			int minute = Integer.parseInt(inputarr[1]);
+			if((hour < 0 || hour > 23) || (minute < 0 || minute > 59)) {
+				if((hour < 0 || hour > 23) && (minute < 0 || minute > 59)) {
+					error += "Hour input is not in 0 ~ 23 and Minute input is not in 0 ~ 59";	
+				}
+				else if(hour < 0 || hour > 23) {
+					error += "Hour input is not in 0 ~ 23";
+				}
+				else {
+					error += "Minute input is not in 0 ~ 59";
+				}
 			}
-			
-			int min = Integer.parseInt(inputarr[1]);
-			if(min < 0 || min > 59) {
-				System.out.println("Error : minute input is not in 0 ~ 59");
-				return false;
-			}
-			
-			return true;
+			else 
+				return true;
 		}
+		System.out.println(error);
+		return false;
+
+		
 	}
-	
+
 	//영화제목 입력시 입력형태가 올바른지 홧인
 	private boolean isTitleinput(String input) {
 		if(input.indexOf("\"") == 0 && input.charAt(input.length()-1) == '\"') {
@@ -294,7 +337,9 @@ public class Movie {
 		String[] inputarr = input.split("\\s");
 		
 		if(inputarr.length == 4 && isDateinput(inputarr[0]) && 
-				isTimeinput(inputarr[1]) && inputarr[2].equals("Screen") && isNumeric(inputarr[3])) {			
+				isTimeinput(inputarr[1]) && 
+				inputarr[2].equals("Screen") && 
+				isScreenNumeric(inputarr[3])) {			
 			return true;
 		}
 		else {
