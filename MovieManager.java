@@ -55,7 +55,7 @@ public class MovieManager {
 			date = sc.nextLine();
 			dataCheck(5, date, "add");
 		case "time":
-			System.out.println("Please enter time(1:1~24:0)");
+			System.out.println("Please enter time(1:0~24:59)");
 			System.out.print(">>");
 			time = sc.nextLine();
 			dataCheck(4, time, "add");
@@ -114,7 +114,7 @@ public class MovieManager {
 			break;
 		case 2:
 			if (data.length() < 1) {
-				System.out.println(data.length());
+				
 				errorPrint("title length error");
 				if(ae.equals("add")) {
 					add("movieTitle");
@@ -181,10 +181,6 @@ public class MovieManager {
 					}else if(ae.equals("edit")) {
 						editData("change");
 					}
-				}
-				if((startHour == 1 && startMin == 0) || (endHour == 24 && endMin == 1)) {
-					errorPrint("time range error");
-					add("time");
 				}
 				
 				if (startHour < 1 || startHour > 24 || endHour < 1 || endHour > 24) {// 시간오류 시간분오류 시간분순서오류
